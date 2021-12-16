@@ -1,7 +1,17 @@
 from GraphInterface import GraphInterface
+from src import NodeData
+from src.EdgeData import EdgeData
 
 
 class DiGraph(GraphInterface) :
+
+    def __init__(self, nodeSize, edgeSize, Mc, Nodes_dic: NodeData, Edge_dic: EdgeData):
+        self.nodeSize= nodeSize
+        self.edgeSize= edgeSize
+        self.Mc= Mc
+        self.Nodes_dic=Nodes_dic
+        self.Edge_dic=Edge_dic
+
 
     def v_size(self) -> int:
         pass

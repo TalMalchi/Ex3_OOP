@@ -1,13 +1,27 @@
+import json
 from typing import List
-
 from GraphAlgoInterface import GraphAlgoInterface #abstractmethod
 from src import GraphInterface
+from EdgeData import  EdgeData
+from NodeData import NodeData
+from DiGraph import DiGraph
 
 
 class GraphAlgo(GraphAlgoInterface):
 
+    def __init__(self, g: DiGraph):
+        self.g= g
+
+
     def load_from_json(self, file_name: str) -> bool:
-        pass
+        with open (file_name) as f:
+            data= f.read()
+            graph_algo= json.loads(data)
+            for edge in graph_algo["Edges"]:
+                self.g.Edge_dic.append(EdgeData(edge["src"], edge["w"], edge["dest"]))
+            for node in graph_algo["Nodes"]:
+                self.g.Nodes_dic.append(NodeData(node["pos"], node["id"]))
+
 
     def save_to_json(self, file_name: str) -> bool:
         pass
