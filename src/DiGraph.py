@@ -2,28 +2,32 @@ from GraphInterface import GraphInterface
 from src import NodeData
 from src.EdgeData import EdgeData
 
+"""The edges are to be saved as a dictionary of dictionaries,  where the index of the outer dictionary is the source
+node ID and its value is a dictionary of destination nodes (ID: Node). The overall structure is {src: {dest: weight}}"""
 
-class DiGraph(GraphInterface) :
+class DiGraph(GraphInterface):
 
     def __init__(self, nodeSize, edgeSize, Mc, Nodes_dic: NodeData, Edge_dic: EdgeData):
-        self.nodeSize= nodeSize
-        self.edgeSize= edgeSize
-        self.Mc= Mc
-        self.Nodes_dic=Nodes_dic
-        self.Edge_dic=Edge_dic
+        self.nodeSize = nodeSize
+        self.edgeSize = edgeSize
+        self.Mc = Mc
+        self.Nodes_dic = Nodes_dic
+        self.Edge_dic = Edge_dic
 
 
     def v_size(self) -> int:
-        pass
+        return self.nodeSize
 
     def get_all_v(self) -> dict:
-        return super().get_all_v()
+        # return super().get_all_v()
+        return self.Nodes_dic #TODO: verify
 
     def all_in_edges_of_node(self, id1: int) -> dict:
-        return super().all_in_edges_of_node(id1)
+        # return super().all_in_edges_of_node(id1)
+
 
     def all_out_edges_of_node(self, id1: int) -> dict:
-        return super().all_out_edges_of_node(id1)
+        # return super().all_out_edges_of_node(id1)
 
     def e_size(self) -> int:
         pass
