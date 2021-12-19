@@ -1,27 +1,31 @@
 import json
+import sys
 from typing import List
-from GraphAlgoInterface import GraphAlgoInterface #abstractmethod
+from GraphAlgoInterface import GraphAlgoInterface  # abstractmethod
 from src import GraphInterface
-from EdgeData import  EdgeData
-from NodeData import NodeData
 from DiGraph import DiGraph
+import networkx as nx
+from queue import PriorityQueue
+import heapq
+import matplotlib.pyplot as plt
+
+
 
 
 class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, g: DiGraph):
-        self.g= g
-
+        self.g = g
 
     def load_from_json(self, file_name: str) -> bool:
-        with open (file_name) as f:
-            data= f.read()
-            graph_algo= json.loads(data)
-            for edge in graph_algo["Edges"]:
-                self.g.Edge_dic.append(EdgeData(edge["src"], edge["w"], edge["dest"]))
+        self.g = DiGraph()
+        with open(file_name) as f:
+            data = f.read()
+            graph_algo = json.loads(data)
             for node in graph_algo["Nodes"]:
-                self.g.Nodes_dic.append(NodeData(node["pos"], node["id"]))
-
+                self.g.add_node(node["id"], node["pos"])
+            for edge in graph_algo["Edges"]:
+                self.g.add_edge(edge["src"], edge["dest"], edge["w"])
 
     def save_to_json(self, file_name: str) -> bool:
         pass
@@ -33,7 +37,7 @@ class GraphAlgo(GraphAlgoInterface):
         pass
 
     def get_graph(self) -> GraphInterface:
-        super().get_graph()
+        return self.g
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         super().TSP(node_lst)
