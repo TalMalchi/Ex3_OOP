@@ -67,7 +67,44 @@ class GraphAlgo(GraphAlgoInterface):
         pass
 
     def plot_graph(self) -> None:
-        pass
+        # Graph= nx.DiGraph()
+        Gtemp=self.g
+        Graph=nx.Gtemp
+        nx.draw(Graph, with_labels=True)
+
+        # Graph=nx.DiGraph()
+        # # Seed=13648
+        # pos = nx.spring_layout(Graph)
+        #
+        # # AllNodes=self.g.get_all_v
+        # # NodesLen=len(AllNodes)
+        # # key_ofNodes=list(AllNodes) #create list of the keys.
+        # # for node in AllNodes:         #now we will add the nodes
+        # #     Graph.add_node(key_ofNodes[node])
+        #
+        # #define all data we neet to the plotting
+        # NodesSize=len(self.g.get_all_v)
+        # EdgesSize=self.g.edge_size
+        # edge_colors = range(2,EdgesSize + 2)
+        # edge_alphas = [(5 + i) / (EdgesSize + 4) for i in range(EdgesSize)]
+        # nodes=nx.draw_networkx_nodes(Graph, pos, NodesSize,"indigo")
+        # edges=nx.draw_networkx_edges(Graph, pos, NodesSize, "->", 10)
+        # cmap = plt.cm.plasma
+        #
+        # for i in range(EdgesSize):
+        #     edges[i].set_alpha(edge_alphas[i])
+        # pc = plt.collections.PatchCollection(edges, cmap)
+        # pc.set_array(edge_colors)
+        # plt.colorbar(pc)
+        #
+        # ax = plt.gca()
+        # ax.set_axis_off()
+        # plt.show()
+        #
+
+        # nx.draw(Graph , with_labels = True)
+        # plt.draw()
+        # plt.show()
 
     def get_graph(self) -> GraphInterface:
         return self.g
