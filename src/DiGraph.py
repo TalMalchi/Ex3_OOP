@@ -28,6 +28,9 @@ class DiGraph(GraphInterface):
     def v_size(self) -> int:
         return len(self.Nodes)
 
+    def getNode(self, key):
+        return self.Nodes.get(key, None)
+
     def get_all_v(self) -> dict:
         return self.Nodes
 

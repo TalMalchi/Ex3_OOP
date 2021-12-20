@@ -11,7 +11,7 @@ from queue import PriorityQueue
 import heapq
 import matplotlib.pyplot as plt
 
-#{src: {dest: weight}}
+# {src: {dest: weight}}
 """@Override
     public NodeData center() {
         try {
@@ -110,8 +110,10 @@ class GraphAlgo(GraphAlgoInterface):
         while len(unvisited_queue):
             uv = heapq.heappop(unvisited_queue)  # Pops a vertex with the smallest distance
             current = uv[1]
-            #current.set_visited()
-            #Visited[]
+            #we will change the edge as visited (means True)
+            Visited.update({current.src: {current.dest, True}})
+            # current.set_visited()
+            # Visited[]
 
             for next_node in current.adjacent:  # for next in v.adjacent:
                 if next_node.visited:  # if visited, skip
@@ -128,10 +130,10 @@ class GraphAlgo(GraphAlgoInterface):
             unvisited_queue = [(v.get_distance(), v) for v in self.g if not v.visited]
             heapq.heapify(unvisited_queue)
 
-    def shortest_path(self, id1: int, id2: int) -> (float, list):
-        #if (self.g.g)
+        # def shortest_path(self, id1: int, id2: int) -> (float, list):
+        # if (self.g.g)
 
-    # def plot_graph(self) -> None:
+        # def plot_graph(self) -> None:
         # Graph= nx.DiGraph()
         Gtemp = self.g
         # Graph = nx.Gtemp
@@ -170,12 +172,3 @@ class GraphAlgo(GraphAlgoInterface):
         # nx.draw(Graph , with_labels = True)
         # plt.draw()
         # plt.show()
-
-    def get_graph(self) -> GraphInterface:
-        return self.g
-
-    def TSP(self, node_lst: List[int]) -> (List[int], float):
-        super().TSP(node_lst)
-
-    def centerPoint(self) -> (int, float):
-        super().centerPoint()
