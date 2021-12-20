@@ -1,6 +1,9 @@
 import json
 import sys
 from typing import List
+
+import numpy as np
+
 from GraphAlgoInterface import GraphAlgoInterface  # abstractmethod
 from src import GraphInterface
 from DiGraph import DiGraph
