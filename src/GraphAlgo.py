@@ -126,7 +126,7 @@ class GraphAlgo(GraphAlgoInterface):
             heapq.heapify(unvisited_queue)
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        pass
+        #if (self.g.g)
 
     # def plot_graph(self) -> None:
         # Graph= nx.DiGraph()
