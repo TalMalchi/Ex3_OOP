@@ -38,7 +38,10 @@ class DiGraph(GraphInterface):
         in_edges = {}
         for curr_src_key in self.Edges.keys():  # for each src key in the dictionary
             if id1 in self.Edges[curr_src_key]:  # if id1 is a valid destination node
-                in_edges.update({curr_src_key: self.Edges[curr_src_key][id1]})
+                in_edges.update({curr_src_key: self.Edges[curr_src_key][id1]})  #{src: {dest: weight}}
+                # for key in self.Edges.keys():
+                #     for innerkey in self.Edges[key].keys():
+                #         self.Edges[key][innerkey]  #weight
         return in_edges
 
     def all_out_edges_of_node(self, id1: int) -> dict:
