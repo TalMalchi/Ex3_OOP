@@ -1,11 +1,12 @@
 import json
 
 from GraphInterface import GraphInterface
-from src import NodeData
+from src.NodeData import NodeData
 from src.EdgeData import EdgeData
 
 """The edges are to be saved as a dictionary of dictionaries,  where the index of the outer dictionary is the source
-node ID and its value is a dictionary of destination nodes (ID: Node). The overall structure is {src: {dest: weight}}"""
+node ID and its value is a dictionary of destination nodes (ID: Node). The overall structure is {src: {dest: weight}}
+Node format is {Node_id: NodeData}"""
 
 
 class DiGraph(GraphInterface):
@@ -62,7 +63,8 @@ class DiGraph(GraphInterface):
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
         if node_id in self.Nodes:
             return False
-        self.Nodes.update({node_id: pos})
+        temp = NodeData(pos, node_id)
+        self.Nodes.update({node_id: temp})
         self.mc += 1
         return True
 
