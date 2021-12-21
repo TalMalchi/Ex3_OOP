@@ -155,12 +155,12 @@ class GraphAlgo(GraphAlgoInterface):
 
         try:
             temp = []  # temp node list
-            if len(node_lst) is 0:  # check if the node's list is empty
+            if len(node_lst) == 0:  # check if the node's list is empty
                 return None
             currNode = node_lst[0]
             temp.append(currNode)
             visitedNodes = ()
-            while len(node_lst) is not 0:  # while there are still unvisited cities
+            while len(node_lst) != 0:  # while there are still unvisited cities
                 visitedNodes.add(currNode)  # add the current node to visitedNode list
                 min_distance = sys.maxsize
                 nextNode = currNode
@@ -179,7 +179,7 @@ class GraphAlgo(GraphAlgoInterface):
                         temp.add(node)
                         visitedNodes.add(node)
                         node_lst.remove(node)
-            if len(temp) is 0:
+            if len(temp) == 0:
                 return None
 
             return temp

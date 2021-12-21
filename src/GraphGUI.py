@@ -1,7 +1,5 @@
 import math
 
-from src.GraphAlgo import GraphAlgo
-from src.DiGraph import DiGraph
 import pygame as pg
 from pygame.locals import *
 from src.DiGraph import DiGraph

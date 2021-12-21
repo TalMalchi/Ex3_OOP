@@ -1,6 +1,6 @@
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
-from src.GraphGUI import GUI
+# from src.GraphGUI import GUI as GUI
 
 
 def check():
@@ -121,8 +121,8 @@ if __name__ == '__main__':
     g = DiGraph()
     g_algo = GraphAlgo(g)
     g_algo.load_from_json("Test1.json")
-    # g_algo.plot_graph()
+    g_algo.plot_graph()
     # print(g_algo.dijkstra(g_algo.g.getNode(0)))
-    gui = GUI(g_algo.g)
-    gui.init_gui()
+    # gui = GUI(g_algo.g)
+    # gui.init_gui()
 
