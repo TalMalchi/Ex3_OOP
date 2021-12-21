@@ -94,13 +94,14 @@ class GraphAlgo(GraphAlgoInterface):
     #         for edge_dest in neighbour_node_edges.keys():
     #             if neighbour_node_edges[edge_dest] not in
 
-    def dijkstra(self, start):  # TODO
+    def dijkstra(self, start):
         """Taken and adapted from: https://www.bogotobogo.com/python/python_Dijkstras_Shortest_Path_Algorithm.php"""
+        final_dijkstra={} #define new dict
         # Set the distance for the start node to zero
         start.set_distance(0)
 
         # Put tuple pair into the priority queue
-        unvisited_queue = [(v.get_distance(), v) for v in self.g]
+        unvisited_queue = [(node.get_distance(), node) for node in self.g.get_all_v()]
         heapq.heapify(unvisited_queue)
 
         # First ,we will initialized boolean array for visit or not
@@ -118,18 +119,29 @@ class GraphAlgo(GraphAlgoInterface):
         while len(unvisited_queue):
             uv = heapq.heappop(unvisited_queue)  # Pops a vertex with the smallest distance
             current = uv[1]
-            #we will change the edge as visited (means True)
-            Visited.update({current.src: {current.dest, True}})
-            # current.set_visited()
-            # Visited[]
+            # we will change the edge as visited (means True)
+            # Visited.update({current.src: {current.dest, True}})#################################
+            current.set_visited()  # turn to true
 
-            for next_node in current.adjacent:  # for next in v.adjacent:
-                if next_node.visited:  # if visited, skip
+            # now I would like to create one long dictionary of all neighbors of current node
+            # means one long dictionary of all_in_edges_of_node and all_in_edges_of_node
+
+            # All_neighbors_in=self.all_in_edges_of_node(current.id)
+            All_neighbors = self.all_out_edges_of_node(current.id)
+
+            # All_neighbors=All_neighbors_in.copy()# Copy the All_neighbors_in into the All_neighbors using copy() method
+            # for key, value in All_neighbors.items():  # use for loop to iterate All_neighbors_out into the All_neighbors dictionary
+            #     All_neighbors[key] = value
+
+            for next_node_id in All_neighbors.keys():  # for next in All_neighbors:
+                next_node = self.g.getNode(next_node_id)
+                if next_node.get_visited():  # if visited, skip
                     continue
                 new_dist = current.get_distance() + All_neighbors[next_node_id]  # {dest_node_id: edge_weight}
                 if new_dist < next_node.get_distance():
                     next_node.set_distance(new_dist)
                     next_node.set_previous(current)
+                    final_dijkstra.update({next_node.get_id():[next_node.get_distance(),next_node.get_previous.get_id()]})#update the relevant value in the answer
 
             # Rebuild heap
             while len(unvisited_queue):  # Pop every item
@@ -138,46 +150,15 @@ class GraphAlgo(GraphAlgoInterface):
             unvisited_queue = [(v.get_distance(), v) for v in self.g if not v.visited]
             heapq.heapify(unvisited_queue)
 
+        return final_dijkstra
+
+        # dijkstra returns: {node_id: [distance, previous_node_id]}
+
     # def shortest_path(self, id1: int, id2: int) -> (float, list):
     # # if (self.g.g)
     #     pass
 
-        # def plot_graph(self) -> None:
-        # Graph= nx.DiGraph()
-        Gtemp = self.g
-        # Graph = nx.Gtemp
-        # nx.draw(Graph, with_labels=True)
+    def plot_graph(self) -> None:
+        gui = GUI(self.g)
+        gui.init_gui()
 
-        # Graph=nx.DiGraph()
-        # # Seed=13648
-        # pos = nx.spring_layout(Graph)
-        #
-        # # AllNodes=self.g.get_all_v
-        # # NodesLen=len(AllNodes)
-        # # key_ofNodes=list(AllNodes) #create list of the keys.
-        # # for node in AllNodes:         #now we will add the nodes
-        # #     Graph.add_node(key_ofNodes[node])
-        #
-        # #define all data we neet to the plotting
-        # NodesSize=len(self.g.get_all_v)
-        # EdgesSize=self.g.edge_size
-        # edge_colors = range(2,EdgesSize + 2)
-        # edge_alphas = [(5 + i) / (EdgesSize + 4) for i in range(EdgesSize)]
-        # nodes=nx.draw_networkx_nodes(Graph, pos, NodesSize,"indigo")
-        # edges=nx.draw_networkx_edges(Graph, pos, NodesSize, "->", 10)
-        # cmap = plt.cm.plasma
-        #
-        # for i in range(EdgesSize):
-        #     edges[i].set_alpha(edge_alphas[i])
-        # pc = plt.collections.PatchCollection(edges, cmap)
-        # pc.set_array(edge_colors)
-        # plt.colorbar(pc)
-        #
-        # ax = plt.gca()
-        # ax.set_axis_off()
-        # plt.show()
-        #
-
-        # nx.draw(Graph , with_labels = True)
-        # plt.draw()
-        # plt.show()

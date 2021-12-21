@@ -4,7 +4,7 @@ import sys
 class Vertex:
     def __init__(self, node):
         self.id = node
-        self.adjacent = {}
+        self.adjacent = {} #{node neighbor:weight}
         # Set distance to infinity for all nodes
         self.distance = sys.maxint
         # Mark all nodes unvisited

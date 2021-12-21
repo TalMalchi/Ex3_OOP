@@ -31,8 +31,19 @@ class NodeData:
             if NodeData.max_value['z'] > self.z:
                 NodeData.max_value['z'] = self.z
 
+        self.distance = sys.maxsize  # set distance to infinity for all nodes
+        self.adjacent = {}  # {neighbor:weight}
+        self.visited = False  # Mark all nodes as unvisited
+        self.previous = None
+
+    def get_visited(self):
+        return self.visited
+
     def get_id(self) -> int:
         return self.id
+
+    def get_distance(self):
+        return self.distance
 
     def get_x(self):
         return self.x
@@ -45,6 +56,18 @@ class NodeData:
 
     def get_pos(self):
         return str(self.x) + "," + str(self.y) + "," + str(self.z)
+
+    def get_weight(self, neighbor):
+        return self.adjacent[neighbor]
+
+    def set_previous(self, prev):
+        self.previous = prev
+
+    def set_distance(self, dist):
+        self.distance = dist
+
+    def get_previous(self, current):
+        return self.previous
 
     def __str__(self):  # for debugging purposes only
         return str("id: " + str(self.id) + " pos: " + str(self.x) + ',' + str(self.y) + ',' + str(self.z))

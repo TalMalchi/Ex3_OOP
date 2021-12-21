@@ -44,13 +44,15 @@ def check0():
     # print("g.get_all_v(): ", g.get_all_v())  # prints a dict with all the graph's vertices.
     # print("g.all_in_edges_of_node(1): ", g.all_in_edges_of_node(1))
     # print("g.all_out_edges_of_node(1): ", g.all_out_edges_of_node(1))
-    g_algo = GraphAlgo(g)
-
-    g_algo.load_from_json("A0.json")
-    g_algo.save_to_json("output.json")
-    g_algo.load_from_json("output.json")
+    # g_algo = GraphAlgo(g)
+    #
+    # g_algo.load_from_json("Test1.json")
+    # g_algo.dijkstra(0)
+    # print()
+    #g_algo.save_to_json("output.json")
+    #g_algo.load_from_json("output.json")
     # g_algo.plot_graph()
-    print()
+    #print()
 
     # print(g_algo.shortest_path(0, 3))
     # g_algo.plot_graph()
@@ -78,6 +80,8 @@ def check2():
     g_algo = GraphAlgo()
     file = '../data/A5.json'
     g_algo.load_from_json(file)
+
+
     g_algo.get_graph().remove_edge(13, 14)
     g_algo.save_to_json(file + "_edited")
     dist, path = g_algo.shortest_path(1, 7)
@@ -117,7 +121,9 @@ if __name__ == '__main__':
     # check0()
     g = DiGraph()
     g_algo = GraphAlgo(g)
-    g_algo.load_from_json("A0.json")
-    gui = GUI(g_algo.g)
-    gui.init_gui()
+    g_algo.load_from_json("Test1.json")
+    g_algo.plot_graph()
+    print(g_algo.dijkstra(g_algo.g.getNode(0)))
+    # gui = GUI(g_algo.g)
+    # gui.init_gui()
 
