@@ -5,7 +5,7 @@ from typing import List
 from GraphAlgoInterface import GraphAlgoInterface  # abstractmethod
 from DiGraph import DiGraph
 import heapq
-from src.GraphGUI import GUI
+from src.GUI.GraphGUI import GUI
 
 # dijkstra returns: {node_id: [distance, previous_node_id]}
 
@@ -189,8 +189,17 @@ class GraphAlgo(GraphAlgoInterface):
 
 
     # def shortest_path(self, id1: int, id2: int) -> (float, list):
-    # # if (self.g.g)
-    #     pass
+        # def shortest_path(self, id1: int, id2: int) -> (float, list):
+        #     ans = []
+        #     if self.g is None or self.g.v_size() is 1 or self.g.v_size() is 0 or \
+        #             self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
+        #         return float('inf'), []
+        #     if id1 == id2:
+        #         # shortest_path_dist =0 #if the source is the dist , destination is 0
+        #         # ans.append(self.g.getNode(id))
+        #         return 0, [id1]
+        #     else:
+        #         u
 
     def plot_graph(self) -> None:
         gui = GUI(self.g)
