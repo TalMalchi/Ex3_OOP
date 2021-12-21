@@ -11,13 +11,13 @@ Node format is {Node_id: NodeData}"""
 
 class DiGraph(GraphInterface):
 
-    def __init__(self, Nodes, Edges):
-        self.mc = 0
-        self.Nodes = Nodes
-        self.Edges = Edges
-        self.edge_size = 0
-        for inner_Edges in Edges.values():  # counting the number of edges
-            self.edge_size += len(inner_Edges)
+    # def __init__(self, Nodes, Edges):
+    #     self.mc = 0
+    #     self.Nodes = Nodes
+    #     self.Edges = Edges
+    #     self.edge_size = 0
+    #     for inner_Edges in Edges.values():  # counting the number of edges
+    #         self.edge_size += len(inner_Edges)
 
     def __init__(self):
         self.Edges = {}

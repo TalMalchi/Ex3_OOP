@@ -5,11 +5,12 @@ from typing import List
 import numpy as np
 
 from GraphAlgoInterface import GraphAlgoInterface  # abstractmethod
-from src import GraphInterface
 from DiGraph import DiGraph
-from queue import PriorityQueue
 import heapq
 import matplotlib.pyplot as plt
+from src.GUI.GraphGUI import GUI
+
+# dijkstra returns: {node_id: [distance, previous_node_id]}
 
 # {src: {dest: weight}}
 """@Override
@@ -102,17 +103,17 @@ class GraphAlgo(GraphAlgoInterface):
         unvisited_queue = [(v.get_distance(), v) for v in self.g]
         heapq.heapify(unvisited_queue)
 
-        #First ,we will initialized boolean array for visit or not
+        # First ,we will initialized boolean array for visit or not
         Visited = {}  # {src: {dest: boolean}}
         for curr_src_key in self.Edges.keys():  # for each src key in the dictionary
             for innerKey in self.Edges[curr_src_key].keys():  # for each dest
-                Visited.update({curr_src_key: {innerKey, False}})  # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
+                Visited.update({curr_src_key: {innerKey,False}})  # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
                 # Visited.update({self.Edges[curr_src_key][innerKey]: False})  #weight
         ###FOR YUVAL DO NOT TOUCH
-            # in_edges.update({curr_src_key: self.Edges[curr_src_key][id1]})
-            # for key in self.Edges.keys(): src
-            #     for innerkey in self.Edges[key].keys(): dest
-            #         self.Edges[key][innerkey]  #weight
+        # in_edges.update({curr_src_key: self.Edges[curr_src_key][id1]})
+        # for key in self.Edges.keys(): src
+        #     for innerkey in self.Edges[key].keys(): dest
+        #         self.Edges[key][innerkey]  #weight
 
         while len(unvisited_queue):
             uv = heapq.heappop(unvisited_queue)  # Pops a vertex with the smallest distance
@@ -125,7 +126,7 @@ class GraphAlgo(GraphAlgoInterface):
             for next_node in current.adjacent:  # for next in v.adjacent:
                 if next_node.visited:  # if visited, skip
                     continue
-                new_dist = current.get_distance() + current.get_weight(next_node)
+                new_dist = current.get_distance() + All_neighbors[next_node_id]  # {dest_node_id: edge_weight}
                 if new_dist < next_node.get_distance():
                     next_node.set_distance(new_dist)
                     next_node.set_previous(current)
@@ -137,8 +138,9 @@ class GraphAlgo(GraphAlgoInterface):
             unvisited_queue = [(v.get_distance(), v) for v in self.g if not v.visited]
             heapq.heapify(unvisited_queue)
 
-        # def shortest_path(self, id1: int, id2: int) -> (float, list):
-        # if (self.g.g)
+    # def shortest_path(self, id1: int, id2: int) -> (float, list):
+    # # if (self.g.g)
+    #     pass
 
         # def plot_graph(self) -> None:
         # Graph= nx.DiGraph()

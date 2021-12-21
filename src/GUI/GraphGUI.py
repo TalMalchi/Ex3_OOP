@@ -6,7 +6,11 @@ import pygame as pg
 from pygame.locals import *
 from src.DiGraph import DiGraph
 from src.NodeData import NodeData
-from sympy import symbols, Eq, solve
+
+
+def init(g: DiGraph):
+    gui = GUI(g)
+    gui.init_gui()
 
 
 def normalize_x(screen_x_size, currNodeVal) -> float:
@@ -19,53 +23,26 @@ def normalize_y(screen_y_size, currNodeVal) -> float:
             NodeData.max_value['y'] - NodeData.min_value['y']) * (screen_y_size - 20) + 10
 
 
+def distance(point1, point2) -> float:
+    return math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
+
+
 def drawArrowForEdge(screen, screen_x_size, screen_y_size, src_node_x, src_node_y, dest_node_x, dest_node_y):
-    # m = (dest_node_y - src_node_y) / (dest_node_x - src_node_x)
-    # b = dest_node_y - (m * dest_node_x)
-    # # for linear function y = mx + b (see wiki for explanation)
-    #
-    # # finding B (see wiki for explanation)
-    # x, y = symbols('x,y')
-    # equation1 = Eq((y - (m * x)), b)
-    #
-    # c_length = 5
-    # equation2 = (((dest_node_y - y) ** 2 + (dest_node_x - x) ** 2), c_length ** 2)
-    #
-    # b_point = solve((equation1, equation2), (x, y))
-    #
-    # # choose min distance from C, as it is the only point that is of interest to us (see more info on names in wiki)
-    # dist1 = math.sqrt((src_node_x - b_point[0][0]) + (src_node_y - b_point[0][1]))
-    # dist2 = math.sqrt((src_node_x - b_point[1][0]) + (src_node_y - b_point[1][1]))
-    # if dist1 < dist2:
-    #     b_point = [b_point[0][0], b_point[0][1]]
-    # else:
-    #     b_point = [b_point[1][0], b_point[1][1]]
-    #
-    # # finding D (the desired node) (see more info on names in wiki)
-    # a_length = math.tan(30) * c_length
-    # a_m = -1.0 / m
-    # a_b = b_point['y'] - (a_m * b_point['x'])
-    #
-    # x, y = symbols('x,y')
-    # equation1 = Eq((y - (a_m * x)), a_b)
-    #
-    # equation2 = (((b_point['y'] - y) ** 2 + (b_point['x'] - x) ** 2), a_length ** 2)
-    # d_point = solve((equation1, equation2), (x, y))
-    # first_point = d_point[0]
-    # second_point = d_point[1]
-    #
-    # first_point = [normalize_x(screen_x_size, first_point[0]), normalize_y(screen_y_size, first_point[1])]
-    # second_point = [normalize_x(screen_x_size, second_point[0]), normalize_y(screen_y_size, second_point[1])]
-    #
-    # pg.draw.line(screen, (0, 0, 0), (first_point[0], second_point[1]), (dest_node_x, dest_node_y), 2)
-    # pg.draw.line(screen, (0, 0, 0), (second_point[0], second_point[1]), (dest_node_x, dest_node_y), 2)
+    """Function to draw an arrowhead in the direction of the line
+    adapted from https://stackoverflow.com/questions/43527894/drawing-arrowheads-which-follow-the-direction-of-the-line-in-pygame/43529178"""
     start = (src_node_x, src_node_y)
     end = (dest_node_x, dest_node_y)
     rotation = math.degrees(math.atan2(start[1] - end[1], end[0] - start[0])) + 90
-    pg.draw.polygon(screen, (0, 0, 0), (
+    pg.draw.polygon(screen, (0, 0, 0), (  # drawing a rectangle to represent the arrowhead
         (end[0] + 5 * math.sin(math.radians(rotation)), end[1] + 5 * math.cos(math.radians(rotation))),
         (end[0] + 5 * math.sin(math.radians(rotation - 120)), end[1] + 5 * math.cos(math.radians(rotation - 120))),
-        (end[0] + 5 * math.sin(math.radians(rotation + 120)), end[1] + 5 * math.cos(math.radians(rotation + 120)))), 2)
+        (end[0] + 5 * math.sin(math.radians(rotation + 120)), end[1] + 5 * math.cos(math.radians(rotation + 120)))))
+
+
+def quadratic(a, b, c):
+    x1 = ((-b) + math.sqrt((b ** 2) - (4 * a * c))) / (2 * a)
+    x2 = ((-b) - math.sqrt((b ** 2) - (4 * a * c))) / (2 * a)
+    return x1, x2
 
 
 class GUI:
@@ -84,8 +61,7 @@ class GUI:
             y = normalize_y(screen_y_size, y)
 
             pg.draw.circle(screen, (0, 0, 0), (x, y), GUI.circle_rad)
-            pg.display.update()  # update screen
-            return GUI.circle_rad
+            # pg.display.update()  # update screen
 
     def draw_graph_edges(self, screen, screen_x_size, screen_y_size):
         for edgeSrcID in self.graph.get_all_v().keys():
@@ -102,20 +78,38 @@ class GUI:
                 dest_node_x = normalize_x(screen_x_size, dest_node_x)
                 dest_node_y = normalize_y(screen_y_size, dest_node_y)
 
-                # m = (dest_node_y - src_node_y) / (dest_node_x - src_node_x)
-                # b = dest_node_y - (m * dest_node_x)
+                # Below we find the point on the edge that ends at the circles' circumference, for more info see wiki
+                m = (dest_node_y - src_node_y) / (dest_node_x - src_node_x)
+                b = dest_node_y - (m * dest_node_x)
+
+                a1 = ((m ** 2) + 1)
+                b1 = ((-2) * dest_node_x - (2 * dest_node_y * m) + (2 * m * b))
+                c1 = ((dest_node_x ** 2) + (dest_node_y ** 2) - (2 * b * dest_node_y) + (b ** 2) - (
+                        (GUI.circle_rad + 5) ** 2))
+                x1, x2 = quadratic(a1, b1, c1)
+                y1 = (m * x1) + b
+                y2 = (m * x2) + b
+                point1 = [x1, y1]
+                point2 = [x2, y2]
+                if distance([src_node_x, src_node_y], point1) < distance([src_node_x, src_node_y], point2):
+                    dest_node_x = point1[0]
+                    dest_node_y = point1[1]
+                else:
+                    dest_node_x = point2[0]
+                    dest_node_y = point2[1]
 
                 pg.draw.line(screen, (0, 0, 0), (src_node_x, src_node_y), (dest_node_x, dest_node_y), 2)
                 drawArrowForEdge(screen, screen_x_size, screen_y_size, src_node_x, src_node_y, dest_node_x, dest_node_y)
 
     def init_gui(self):
         pg.init()
+        clock = pg.time.Clock()
         screen_x_size = 800
         screen_y_size = 600
         screen = pg.display.set_mode((screen_x_size + 20, screen_y_size + 20), HWSURFACE | DOUBLEBUF | RESIZABLE)
         screen.fill((255, 255, 255))  # white background
-        self.draw_graph_nodes(screen, screen_x_size, screen_y_size)
         self.draw_graph_edges(screen, screen_x_size, screen_y_size)
+        self.draw_graph_nodes(screen, screen_x_size, screen_y_size)
         pg.display.update()
 
         running = True
@@ -125,6 +119,7 @@ class GUI:
                     running = False
                 elif event.type == VIDEORESIZE:
                     screen.fill((255, 255, 255))  # white background
-                    circle_rad = self.draw_graph_nodes(screen, pg.display.Info().current_w, pg.display.Info().current_h)
-                    self.draw_graph_edges(screen, pg.display.Info().current_w, pg.display.Info().current_h, circle_rad)
+                    self.draw_graph_nodes(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                    self.draw_graph_edges(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                    clock.tick(30)
                     pg.display.update()

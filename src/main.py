@@ -1,7 +1,7 @@
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
-from NodeData import NodeData
-from src.GUI import GUI
+from src.GUI.GraphGUI import GUI
+import data
 
 
 def check():
