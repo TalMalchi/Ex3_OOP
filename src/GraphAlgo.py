@@ -93,43 +93,30 @@ class GraphAlgo(GraphAlgoInterface):
 
     def dijkstra(self, start):
         """Taken and adapted from: https://www.bogotobogo.com/python/python_Dijkstras_Shortest_Path_Algorithm.php"""
-        final_dijkstra={} #define new dict
+        final_dijkstra = {}  # define new dict
+        final_dijkstra.update({start.get_id(): [0, 0.5]})
+
         # Set the distance for the start node to zero
         start.set_distance(0)
 
         # Put tuple pair into the priority queue
-        unvisited_queue = [(node.get_distance(), node) for node in self.g.get_all_v()]
+        unvisited_queue = [(node.get_distance(), node) for node in self.g.get_all_v().values()]
         heapq.heapify(unvisited_queue)
 
         # First ,we will initialized boolean array for visit or not
         Visited = {}  # {src: {dest: boolean}}
-        for curr_src_key in self.Edges.keys():  # for each src key in the dictionary
-            for innerKey in self.Edges[curr_src_key].keys():  # for each dest
-                Visited.update({curr_src_key: {innerKey,False}})  # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
-                # Visited.update({self.Edges[curr_src_key][innerKey]: False})  #weight
-        ###FOR YUVAL DO NOT TOUCH
-        # in_edges.update({curr_src_key: self.Edges[curr_src_key][id1]})
-        # for key in self.Edges.keys(): src
-        #     for innerkey in self.Edges[key].keys(): dest
-        #         self.Edges[key][innerkey]  #weight
-
+        for curr_src_key in self.g.Edges.keys():  # for each src key in the dictionary
+            for innerKey in self.g.Edges[curr_src_key].keys():  # for each dest
+                Visited.update({curr_src_key: {innerKey,
+                                               False}})  # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
         while len(unvisited_queue):
             uv = heapq.heappop(unvisited_queue)  # Pops a vertex with the smallest distance
             current = uv[1]
             # we will change the edge as visited (means True)
-            # Visited.update({current.src: {current.dest, True}})#################################
             current.set_visited()  # turn to true
 
             # now I would like to create one long dictionary of all neighbors of current node
-            # means one long dictionary of all_in_edges_of_node and all_in_edges_of_node
-
-            # All_neighbors_in=self.all_in_edges_of_node(current.id)
-            All_neighbors = self.all_out_edges_of_node(current.id)
-
-            # All_neighbors=All_neighbors_in.copy()# Copy the All_neighbors_in into the All_neighbors using copy() method
-            # for key, value in All_neighbors.items():  # use for loop to iterate All_neighbors_out into the All_neighbors dictionary
-            #     All_neighbors[key] = value
-
+            All_neighbors = self.g.all_out_edges_of_node(current.id)
             for next_node_id in All_neighbors.keys():  # for next in All_neighbors:
                 next_node = self.g.getNode(next_node_id)
                 if next_node.get_visited():  # if visited, skip
@@ -138,13 +125,16 @@ class GraphAlgo(GraphAlgoInterface):
                 if new_dist < next_node.get_distance():
                     next_node.set_distance(new_dist)
                     next_node.set_previous(current)
-                    final_dijkstra.update({next_node.get_id():[next_node.get_distance(),next_node.get_previous.get_id()]})#update the relevant value in the answer
+                    # update the relevant value in the answer means:{node_id: [distance, previous_node_id]}
+                    final_dijkstra.update({next_node.get_id(): [next_node.get_distance(), next_node.get_previous(
+                        current).get_id()]})
 
             # Rebuild heap
             while len(unvisited_queue):  # Pop every item
                 heapq.heappop(unvisited_queue)
             # Put all vertices not visited into the queue
-            unvisited_queue = [(v.get_distance(), v) for v in self.g if not v.visited]
+            unvisited_queue = [(v.get_distance(), v) for v in self.g.get_all_v().values() if not v.visited]
+
             heapq.heapify(unvisited_queue)
 
         return final_dijkstra
@@ -168,7 +158,7 @@ class GraphAlgo(GraphAlgoInterface):
                 path = []  # init ans list of nodes
                 for node in node_lst:  # go all over the unvisited nodes, calculate the closest one
                     if node not in visitedNodes:
-                        curr_distance = self.shortest_path(currNode.get_id, node.get_id)[1]
+                        curr_distance = self.shortest_path(currNode, node)[1]
                         if curr_distance < min_distance:
                             min_distance = curr_distance
                             nextNode = node
@@ -183,7 +173,7 @@ class GraphAlgo(GraphAlgoInterface):
                 return None
 
             return temp
-        except:
+        except Exception:
             print("Invalid graph for TSP on these cities!")
             return None
 
@@ -204,4 +194,3 @@ class GraphAlgo(GraphAlgoInterface):
     def plot_graph(self) -> None:
         gui = GUI(self.g)
         gui.init_gui()
-

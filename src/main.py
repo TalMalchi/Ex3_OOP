@@ -1,5 +1,7 @@
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
+
+
 # from src.GraphGUI import GUI as GUI
 
 
@@ -48,10 +50,10 @@ def check0():
     # g_algo.load_from_json("Test1.json")
     # g_algo.dijkstra(0)
     # print()
-    #g_algo.save_to_json("output.json")
-    #g_algo.load_from_json("output.json")
+    # g_algo.save_to_json("output.json")
+    # g_algo.load_from_json("output.json")
     # g_algo.plot_graph()
-    #print()
+    # print()
 
     # print(g_algo.shortest_path(0, 3))
     # g_algo.plot_graph()
@@ -79,7 +81,6 @@ def check2():
     g_algo = GraphAlgo()
     file = '../data/A5.json'
     g_algo.load_from_json(file)
-
 
     g_algo.get_graph().remove_edge(13, 14)
     g_algo.save_to_json(file + "_edited")
@@ -120,9 +121,8 @@ if __name__ == '__main__':
     # check0()
     g = DiGraph()
     g_algo = GraphAlgo(g)
-    g_algo.load_from_json("Test1.json")
+    g_algo.load_from_json("A0.json")
     g_algo.plot_graph()
     # print(g_algo.dijkstra(g_algo.g.getNode(0)))
     # gui = GUI(g_algo.g)
     # gui.init_gui()
-

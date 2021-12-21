@@ -59,7 +59,22 @@ class GUI:
             y = normalize_y(screen_y_size, y)
 
             pg.draw.circle(screen, (0, 0, 0), (x, y), GUI.circle_rad)
-            # pg.display.update()  # update screen
+
+            y -= 15
+            if y < 5:
+                y += 15
+                x += 15
+            if x > screen_x_size - 5:
+                x -= 15
+                y -= 15
+            if y > screen_y_size - 5:
+                y -= 15
+                x += 15
+            font = pg.font.SysFont('Arial', 20)
+            text = font.render(str(node.get_id()), True, (255, 0, 0))
+            text_rect = text.get_rect()
+            text_rect.center = (x, y)
+            screen.blit(text, text_rect)
 
     def draw_graph_edges(self, screen, screen_x_size, screen_y_size):
         for edgeSrcID in self.graph.get_all_v().keys():
@@ -102,6 +117,7 @@ class GUI:
     def init_gui(self):
         pg.init()
         clock = pg.time.Clock()
+        pg.display.set_caption('Graph UI')
         screen_x_size = 800
         screen_y_size = 600
         screen = pg.display.set_mode((screen_x_size + 20, screen_y_size + 20), HWSURFACE | DOUBLEBUF | RESIZABLE)
