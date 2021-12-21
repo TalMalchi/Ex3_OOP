@@ -2,13 +2,10 @@ import json
 import sys
 from typing import List
 
-import numpy as np
-
 from GraphAlgoInterface import GraphAlgoInterface  # abstractmethod
 from DiGraph import DiGraph
 import heapq
-import matplotlib.pyplot as plt
-from src.GUI.GraphGUI import GUI
+from src.GraphGUI import GUI
 
 # dijkstra returns: {node_id: [distance, previous_node_id]}
 
@@ -153,6 +150,43 @@ class GraphAlgo(GraphAlgoInterface):
         return final_dijkstra
 
         # dijkstra returns: {node_id: [distance, previous_node_id]}
+
+    def TSP(self, node_lst: List[int]) -> (List[int], float):
+
+        try:
+            temp = []  # temp node list
+            if len(node_lst) is 0:  # check if the node's list is empty
+                return None
+            currNode = node_lst[0]
+            temp.append(currNode)
+            visitedNodes = ()
+            while len(node_lst) is not 0:  # while there are still unvisited cities
+                visitedNodes.add(currNode)  # add the current node to visitedNode list
+                min_distance = sys.maxsize
+                nextNode = currNode
+                node_lst.remove(currNode)
+                path = []  # init ans list of nodes
+                for node in node_lst:  # go all over the unvisited nodes, calculate the closest one
+                    if node not in visitedNodes:
+                        curr_distance = self.shortest_path(currNode.get_id, node.get_id)[1]
+                        if curr_distance < min_distance:
+                            min_distance = curr_distance
+                            nextNode = node
+                            path = self.shortest_path(currNode.get_id, node.get_id)[
+                                0]  # add the closest node to path list
+                for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
+                    if node is not path[0]:
+                        temp.add(node)
+                        visitedNodes.add(node)
+                        node_lst.remove(node)
+            if len(temp) is 0:
+                return None
+
+            return temp
+        except:
+            print("Invalid graph for TSP on these cities!")
+            return None
+
 
     # def shortest_path(self, id1: int, id2: int) -> (float, list):
     # # if (self.g.g)
