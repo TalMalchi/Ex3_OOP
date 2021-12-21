@@ -5,38 +5,9 @@ from typing import List
 from GraphAlgoInterface import GraphAlgoInterface  # abstractmethod
 from DiGraph import DiGraph
 import heapq
+
+from src import GraphInterface
 from src.GUI.GraphGUI import GUI
-
-# dijkstra returns: {node_id: [distance, previous_node_id]}
-
-# {src: {dest: weight}}
-"""@Override
-    public NodeData center() {
-        try {
-            int minMaxKey = Integer.MAX_VALUE;
-            double minMaxValue = Double.MAX_VALUE;
-
-            Iterator<NodeData> itr = graph.nodeIter();
-            while (itr.hasNext()) { //for each node
-                NodeData currNode = itr.next();
-                HashMap<Integer, double[]> map = this.DijkstrasAlgo(currNode);
-                double currMaxVal = 0;
-                for (Map.Entry<Integer, double[]> entry : map.entrySet()) { //for each entry in map
-                    if (currMaxVal < entry.getValue()[0]) {
-                        currMaxVal = entry.getValue()[0];
-                    }
-                }
-                if (minMaxValue > currMaxVal) {
-                    minMaxKey = currNode.getKey();
-                    minMaxValue = currMaxVal;
-                }
-            }
-            return this.graph.getNode(minMaxKey);
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }"""  # Center function on java
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -44,52 +15,49 @@ class GraphAlgo(GraphAlgoInterface):
     def __init__(self, g: DiGraph):
         self.g = g
 
+    def get_graph(self) -> GraphInterface:
+        return self.g
+
     def load_from_json(self, file_name: str) -> bool:
-        self.g = DiGraph()
-        with open(file_name) as f:
-            data = f.read()
-            graph_algo = json.loads(data)
-            for node in graph_algo["Nodes"]:
-                self.g.add_node(node["id"], node["pos"])
-            for edge in graph_algo["Edges"]:
-                self.g.add_edge(edge["src"], edge["dest"], edge["w"])
+        try:
+            self.g = DiGraph()
+            with open(file_name) as f:
+                data = f.read()
+                graph_algo = json.loads(data)
+                for node in graph_algo["Nodes"]:
+                    self.g.add_node(node["id"], node["pos"])
+                for edge in graph_algo["Edges"]:
+                    self.g.add_edge(edge["src"], edge["dest"], edge["w"])
+
+        except IOError as e:
+            print(e)
+            return False
+        return True
 
     def save_to_json(self, file_name: str) -> bool:
-        if self.g is None:
+        try:
+            if self.g is None:
+                return False
+
+            # add edges to list
+            edges = []
+            for n in self.g.get_all_v().keys():
+                for dest in self.g.all_out_edges_of_node(n):
+                    edges.append({"src": n, "dest": dest, "w": self.g.all_out_edges_of_node(n).get(dest)})
+
+            # add nodes to list
+            nodes = []
+            for key in self.g.get_all_v().keys():
+                nodes.append({"id": key, "pos": self.g.get_all_v()[key].get_pos()})
+
+            saved_graph = {"Nodes": nodes, "Edges": edges}
+            with open(file_name, 'w') as json_file:
+                json.dump(saved_graph, json_file)
+
+        except IOError as e:
+            print(e)
             return False
-
-        # add edges to list
-        edges = []
-        for n in self.g.get_all_v().keys():
-            for dest in self.g.all_out_edges_of_node(n):
-                edges.append({"src": n, "dest": dest, "w": self.g.all_out_edges_of_node(n).get(dest)})
-
-        # add nodes to list
-        nodes = []
-        for key in self.g.get_all_v().keys():
-            nodes.append({"id": key, "pos": self.g.get_all_v()[key].get_pos()})
-
-        saved_graph = {"Nodes": nodes, "Edges": edges}
-        with open(file_name, 'w') as json_file:
-            json.dump(saved_graph, json_file)
-
-    # def dijkstras_algo(self, src_node: int) -> dict:
-    #     map = {}
-    #     visited = {}
-    #     unvisited = {}
-    #     map.update({src_node: [0, 0.5]})
-    #     unvisited.update({src_node: None})
-    #     for node in self.g.get_all_v().keys():
-    #         if node != src_node:
-    #             map.update({node: [sys.maxsize, 0.5]})
-    #             unvisited.update({node, None})
-    #
-    #     curr_node = src_node
-    #     curr_val = 0
-    #     while not len(unvisited) == 0:
-    #         neighbour_node_edges = self.g.all_out_edges_of_node(curr_node)
-    #         for edge_dest in neighbour_node_edges.keys():
-    #             if neighbour_node_edges[edge_dest] not in
+        return True
 
     def dijkstra(self, start):
         """Taken and adapted from: https://www.bogotobogo.com/python/python_Dijkstras_Shortest_Path_Algorithm.php"""
@@ -139,10 +107,7 @@ class GraphAlgo(GraphAlgoInterface):
 
         return final_dijkstra
 
-        # dijkstra returns: {node_id: [distance, previous_node_id]}
-
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-
         try:
             temp = []  # temp node list
             if len(node_lst) == 0:  # check if the node's list is empty
@@ -162,7 +127,7 @@ class GraphAlgo(GraphAlgoInterface):
                         if curr_distance < min_distance:
                             min_distance = curr_distance
                             nextNode = node
-                            path = self.shortest_path(currNode.get_id, node.get_id)[
+                            path = self.shortest_path(currNode, node)[
                                 0]  # add the closest node to path list
                 for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
                     if node is not path[0]:
@@ -177,19 +142,32 @@ class GraphAlgo(GraphAlgoInterface):
             print("Invalid graph for TSP on these cities!")
             return None
 
+    # def centerPoint(self) -> (int, float):
+    #     try:
+    #         minMaxKey= sys.maxsize
+    #         minMaxValue=sys.maxsize
+    #         for node in self.g.get_all_v().:
+    #             currNode =
+    #             map= self.dijkstra()
 
-    # def shortest_path(self, id1: int, id2: int) -> (float, list):
-        # def shortest_path(self, id1: int, id2: int) -> (float, list):
-        #     ans = []
-        #     if self.g is None or self.g.v_size() is 1 or self.g.v_size() is 0 or \
-        #             self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
-        #         return float('inf'), []
-        #     if id1 == id2:
-        #         # shortest_path_dist =0 #if the source is the dist , destination is 0
-        #         # ans.append(self.g.getNode(id))
-        #         return 0, [id1]
-        #     else:
-        #         u
+    def shortest_path(self, id1: int, id2: int) -> (float, list):
+        ans = []
+        if self.g is None or self.g.v_size() is 1 or self.g.v_size() is 0 or \
+                self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
+            return float('inf'), []
+        if id1 == id2:
+            return 0, [id1]
+        else:
+            update_graph_dic = self.dijkstra(self,
+                                             id1)  # dijkstra function return a dictionary with updated shortest path
+            n = self.g.getNode(id2)  # get shortest path from id2
+            i = id2
+            # for i in update_graph_dic:  # go all over the dijkstra_dic
+            while i is not -1:
+                ans.append(i)  # add to the list all the nodes that append after id2
+                i = update_graph_dic.get(i)
+            ans.reverse()  # reverse the list
+        return n.get_weight, ans
 
     def plot_graph(self) -> None:
         gui = GUI(self.g)
