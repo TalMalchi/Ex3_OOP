@@ -123,6 +123,6 @@ if __name__ == '__main__':
     g_algo = GraphAlgo(g)
     g_algo.load_from_json("A0.json")
     g_algo.plot_graph()
-    # print(g_algo.dijkstra(g_algo.g.getNode(0)))
+    print(g_algo.dijkstra(g_algo.g.getNode(0)))
     # gui = GUI(g_algo.g)
     # gui.init_gui()

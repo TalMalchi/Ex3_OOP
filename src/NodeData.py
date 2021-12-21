@@ -71,3 +71,25 @@ class NodeData:
 
     def __str__(self):  # for debugging purposes only
         return str("id: " + str(self.id) + " pos: " + str(self.x) + ',' + str(self.y) + ',' + str(self.z))
+
+    def set_visited(self):
+        self.visited = True
+#for using heapq.heapify in GraphAlgo
+
+    def __eq__(self, other):
+        return self.get_id() == other.get_id
+
+    def __ne__(self, other):
+        return not (self == other)
+
+    def __lt__(self, other):
+        return self.id < other.id
+
+    def __gt__(self, other):
+        return self.id > other.id
+
+    def __le__(self, other):
+        return (self < other) or (self == other)
+
+    def __ge__(self, other):
+        return (self > other) or (self == other)
