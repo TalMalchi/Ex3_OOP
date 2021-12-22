@@ -1,9 +1,9 @@
 import json
+import os
 import sys
 from typing import List
-
-from GraphAlgoInterface import GraphAlgoInterface  # abstractmethod
-from DiGraph import DiGraph
+from src.GraphAlgoInterface import GraphAlgoInterface
+from src.DiGraph import DiGraph
 import heapq
 
 from src import GraphInterface
@@ -21,7 +21,9 @@ class GraphAlgo(GraphAlgoInterface):
     def load_from_json(self, file_name: str) -> bool:
         try:
             self.g = DiGraph()
-            with open(file_name) as f:
+            root_dir = os.path.dirname(os.path.abspath(__file__))[:-4]
+            path = os.path.join(root_dir, file_name)
+            with open(path) as f:
                 data = f.read()
                 graph_algo = json.loads(data)
                 for node in graph_algo["Nodes"]:
@@ -61,6 +63,12 @@ class GraphAlgo(GraphAlgoInterface):
 
     def dijkstra(self, start):
         """Taken and adapted from: https://www.bogotobogo.com/python/python_Dijkstras_Shortest_Path_Algorithm.php"""
+        for node in self.g.get_all_v().values():
+            node.distance = sys.maxsize  # set distance to infinity for all nodes
+            node.adjacent = {}  # {neighbor:weight}
+            node.visited = False  # Mark all nodes as unvisited
+            node.previous = None
+
         final_dijkstra = {}  # define new dict
         final_dijkstra.update({start.get_id(): [0, 0.5]})
 
@@ -71,12 +79,13 @@ class GraphAlgo(GraphAlgoInterface):
         unvisited_queue = [(node.get_distance(), node) for node in self.g.get_all_v().values()]
         heapq.heapify(unvisited_queue)
 
-        # First ,we will initialized boolean array for visit or not
+        # First ,we will initialize boolean array for visit or not
         Visited = {}  # {src: {dest: boolean}}
         for curr_src_key in self.g.Edges.keys():  # for each src key in the dictionary
             for innerKey in self.g.Edges[curr_src_key].keys():  # for each dest
-                Visited.update({curr_src_key: {innerKey,
-                                               False}})  # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
+                # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
+                Visited.update({curr_src_key: {innerKey, False}})
+
         while len(unvisited_queue):
             uv = heapq.heappop(unvisited_queue)  # Pops a vertex with the smallest distance
             current = uv[1]
@@ -107,48 +116,78 @@ class GraphAlgo(GraphAlgoInterface):
 
         return final_dijkstra
 
+    def shortest_path(self, id1: int, id2: int) -> (float, list):
+        try:
+            ans = []
+            if self.g is None or self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
+                return float('inf'), []
+            if id1 == id2:
+                return 0, [id1]
+
+            # dijkstra function return a dictionary with updated shortest path
+            update_graph_dict = self.dijkstra(self.g.getNode(id1))
+            if update_graph_dict[id2][0] == sys.maxsize:
+                return float('inf'), []
+
+            curr_node_key = id2
+            while curr_node_key != id1:  # go all over the dijkstra_dic
+                ans.insert(0, curr_node_key)
+                if update_graph_dict[curr_node_key][1] != 0.5:
+                    curr_node_key = update_graph_dict[curr_node_key][1]
+                else:
+                    break
+            ans.insert(0, id1)  # add to the list all the nodes that append after id2
+            return update_graph_dict[id2][0], ans
+        except Exception:
+            return float('inf'), []
+
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-
-            temp = []  # temp node list
-            if len(node_lst) == 0:  # check if the node's list is empty
-                return None
-            currNode = node_lst[0]
-            temp.append(currNode)
-            visitedNodes = ()
-            while len(node_lst) != 0:  # while there are still unvisited cities
-                visitedNodes.add(currNode)  # add the current node to visitedNode list
-                min_distance = sys.maxsize
-                nextNode = currNode
+        temp = []  # temp node list
+        if len(node_lst) == 0:  # check if the node's list is empty
+            return None
+        currNode = node_lst[0]
+        temp.append(currNode)
+        visitedNodes = []
+        while len(node_lst) != 0:  # while there are still unvisited cities
+            visitedNodes.append(currNode)  # add the current node to visitedNode list
+            min_distance = sys.maxsize
+            nextNode = currNode
+            if currNode in node_lst:
                 node_lst.remove(currNode)
-                path = []  # init ans list of nodes
-                for node in node_lst:  # go all over the unvisited nodes, calculate the closest one
-                    if node not in visitedNodes:
-                        curr_distance = self.shortest_path(currNode, node)[1]
-                        if curr_distance < min_distance:
-                            min_distance = curr_distance
-                            nextNode = node
-                            path = self.shortest_path(currNode, node)[
-                                0]  # add the closest node to path list
-                for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
-                    if node is not path[0]:
-                        temp.add(node)
-                        visitedNodes.add(node)
-                        node_lst.remove(node)
-            if len(temp) == 0:
-                return None
+            path = []  # init ans list of nodes
 
-            return temp
+            for node in node_lst:  # go all over the unvisited nodes, calculate the closest one
+                if node not in visitedNodes:
+                    # print(self.shortest_path(currNode, node)[1])
+                    short_path_result = self.shortest_path(currNode, node)
+                    curr_distance = short_path_result[0]
+                    if curr_distance < min_distance:
+                        min_distance = curr_distance
+                        nextNode = node
+                        path = short_path_result[1]  # add the closest node to path list
+                        currNode = nextNode
+
+            for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
+                if node is not path[0]:  # add all vertices if they are not the first item in the 'path' list
+                    temp.append(node)
+                    visitedNodes.append(node)
+                    if node in node_lst:
+                        node_lst.remove(node)
+        if len(temp) == 0:
+            return None
+
+        return temp
 
     def centerPoint(self) -> (int, float):
-        dijk_route = {}  # remember that we get from dijkstra : {node_id: [distance, previous_node_id]}
+        dijk_route = {}  # note that we get from dijkstra : {node_id: [distance, previous_node_id]}
         try:
             minMaxKey = sys.maxsize
             minMaxValue = sys.maxsize
+
             for currNode in self.g.get_all_v().values():  # we will moove over all nodes in the graph
                 dijk_route = self.dijkstra(currNode)
                 currMaxVal = 0;
 
-                # for key in dijk_route.keys():
                 for value in dijk_route.values():  # for each value in the dictionary
                     currVal = value[0]  # we will take the distance as currVal
                     if currMaxVal < currVal:
@@ -157,33 +196,36 @@ class GraphAlgo(GraphAlgoInterface):
                     minMaxKey = currNode.get_id();
                     minMaxValue = currMaxVal;
 
-            return (self.g.getNode(minMaxKey).get_id(), minMaxValue)
+            return (minMaxKey, minMaxValue)
 
         except Exception:
             return None
 
-    def shortest_path(self, id1: int, id2: int) -> (float, list):
-        ans = []
-        if self.g is None or self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
-            return float('inf'), []
-        if id1 == id2:
-            return 0, [id1]
-        else:
-            update_graph_dict = self.dijkstra(
-                self.g.get_all_v()[1])  # dijkstra function return a dictionary with updated shortest path
-            if update_graph_dict[id2][0] == sys.maxsize:
-                return float('inf'), []
-
-        curr_node_key = id2
-        while curr_node_key != id1:  # go all over the dijkstra_dic
-            ans.insert(0, curr_node_key)
-            if update_graph_dict[curr_node_key][1] != 0.5:
-                curr_node_key = update_graph_dict[curr_node_key][1]
-            else:
-                break
-        ans.insert(0, id1)  # add to the list all the nodes that append after id2
-        return update_graph_dict[id2][0], ans
-
     def plot_graph(self) -> None:
         gui = GUI(self.g)
         gui.init_gui()
+
+    # def centerPoint2(self) -> (int, float):
+    #     dijk_route = {}  # note that we get from dijkstra : {node_id: [distance, previous_node_id]}
+    #     # try:
+    #     minMaxKey = sys.maxsize
+    #     minMaxValue = sys.maxsize
+    #
+    #     for currNode in self.g.get_all_v().values():  # we will move over all nodes in the graph
+    #         # currNode= self.g.getNode()
+    #         map = self.dijkstra(currNode)
+    #         currMaxVal = 0
+    #
+    #         for key in map.keys():  # for each value in the dictionary
+    #             value = map.get(key)
+    #             currVal = value[0]  # we will take the distance as currVal
+    #             if currMaxVal < currVal:
+    #                 currMaxVal = currVal
+    #         if minMaxValue > currMaxVal:
+    #             minMaxKey = currNode.get_id()
+    #             minMaxValue = currMaxVal
+    #
+    #     return minMaxKey, minMaxValue
+
+    # except Exception:
+    #     return None

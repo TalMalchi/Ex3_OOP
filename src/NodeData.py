@@ -74,6 +74,7 @@ class NodeData:
 
     def set_visited(self):
         self.visited = True
+
 #for using heapq.heapify in GraphAlgo
 
     def __eq__(self, other):

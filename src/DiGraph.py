@@ -1,8 +1,7 @@
 import json
-
-from GraphInterface import GraphInterface
+import random
+from src.GraphInterface import GraphInterface
 from src.NodeData import NodeData
-from src.EdgeData import EdgeData
 
 """The edges are to be saved as a dictionary of dictionaries,  where the index of the outer dictionary is the source
 node ID and its value is a dictionary of destination nodes (ID: Node). The overall structure is {src: {dest: weight}}
@@ -41,7 +40,7 @@ class DiGraph(GraphInterface):
         in_edges = {}
         for curr_src_key in self.Edges.keys():  # for each src key in the dictionary
             if id1 in self.Edges[curr_src_key]:  # if id1 is a valid destination node
-                in_edges.update({curr_src_key: self.Edges[curr_src_key][id1]})  #{src: {dest: weight}}
+                in_edges.update({curr_src_key: self.Edges[curr_src_key][id1]})  # {src: {dest: weight}}
                 # for key in self.Edges.keys():
                 #     for innerkey in self.Edges[key].keys():
                 #         self.Edges[key][innerkey]  #weight
@@ -70,6 +69,8 @@ class DiGraph(GraphInterface):
         return True
 
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
+        if pos is None:
+            pos = str(random.randint(0, 100)) + ',' + str(random.randint(0, 100)) + ',' + str(0)
         if node_id in self.Nodes:
             return False
         temp = NodeData(pos, node_id)
@@ -82,8 +83,9 @@ class DiGraph(GraphInterface):
             return False
 
         if node_id in self.Edges.keys():
+            self.edge_size -= len(self.all_out_edges_of_node(node_id))
             self.Edges.pop(node_id)  # remove edges FROM node_id
-        for curr_src in self.Edges.keys:
+        for curr_src in self.all_in_edges_of_node(node_id).keys():
             self.remove_edge(curr_src, node_id)  # remove edges TO node_id
         self.Nodes.pop(node_id)  # remove node
         self.mc += 1

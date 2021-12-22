@@ -118,25 +118,23 @@ class GUI:
                 pg.draw.line(screen, (0, 0, 0), (src_node_x, src_node_y), (dest_node_x, dest_node_y), 2)
                 drawArrowForEdge(screen, screen_x_size, screen_y_size, src_node_x, src_node_y, dest_node_x, dest_node_y)
 
-                x1 = ((2 * src_node_y * b) - (
-                        2 * dest_node_y * b) + dest_node_y ** 2 - src_node_y ** 2 + dest_node_x ** 2 - src_node_x ** 2) / (
-                             (2 * m * dest_node_y) - (2 * m * src_node_y) - (2 * src_node_x) - (2 * dest_node_x))
-                y1 = (m*x1) + b
+                # x1 = abs(src_node_x + dest_node_x)/2
+                # y1 = abs(src_node_y + dest_node_y)/2
+                #
+                # if m >= 0:
+                #     x1 -= 50
+                #     y1 -= 50
+                #     x1, y1 = get_away_from_edge_of_screen(x1, y1, screen_x_size, screen_y_size)
+                # else:
+                #     x1 += 50
+                #     y1 += 50
+                #     x1, y1 = get_away_from_edge_of_screen(x1, y1, screen_x_size, screen_y_size)
 
-                if m >= 0:
-                    x1 -= 15
-                    y1 += 15
-                    x1, y1 = get_away_from_edge_of_screen(x1, y1, screen_x_size, screen_y_size)
-                else:
-                    x1 += 15
-                    y1 -= 15
-                    x1, y1 = get_away_from_edge_of_screen(x1, y1, screen_x_size, screen_y_size)
-
-                font = pg.font.SysFont('Arial', 12)
-                text = font.render(str(round(self.graph.get_edge_weight(edgeSrcID, edgeDestID), 3)), True, (255, 0, 0))
-                text_rect = text.get_rect()
-                text_rect.center = (x1, y1)
-                screen.blit(text, text_rect)
+                # font = pg.font.SysFont('Arial', 12)
+                # text = font.render(str(round(self.graph.get_edge_weight(edgeSrcID, edgeDestID), 3)), True, (255, 0, 0))
+                # text_rect = text.get_rect()
+                # text_rect.center = (x1+15, y1+15)
+                # screen.blit(text, text_rect)
 
     def init_gui(self):
         pg.init()
