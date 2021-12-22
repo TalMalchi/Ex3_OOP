@@ -8,13 +8,13 @@ class NodeData:
 
     def __init__(self, pos: str, id: int):
         self.id = id
-        if pos == 'None' or pos is None:
+        if pos == 'None' or pos is None: #if pos is nonwwe will initilized all x,y,z values as none
             self.x = None
             self.y = None
             self.z = None
         else:
-            pos_lst = pos.split(',')
-            self.x = float(pos_lst[0])
+            pos_lst = pos.split(',') #split string by ,
+            self.x = float(pos_lst[0]) #we will take the
             self.y = float(pos_lst[1])
             self.z = float(pos_lst[2])
             if NodeData.min_value['x'] < self.x:

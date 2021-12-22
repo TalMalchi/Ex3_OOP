@@ -43,15 +43,13 @@ class Test(TestCase):
         g_algo.load_from_json("data/G1.json")
         self.assertEqual(g_algo.g.getNode(0).get_x(), 35.19589389346247)
 
-    def test_save_to_json(self):  # done
+    def test_save_to_json(self):
         g = DiGraph()
         g_algo = GraphAlgo(g)
         g1 = DiGraph()
         g_algo1 = GraphAlgo(g)
         g_algo.save_to_json("out/check")
         g_algo1.load_from_json("out/check")
-        # print(g_algo.g.v_size())
-        # print(g_algo1.g.v_size())
         self.assertEqual(g_algo.g.v_size(), g_algo1.g.v_size())
 
     def test_shortest_path(self):
@@ -61,7 +59,6 @@ class Test(TestCase):
         short_ans = g_algo.shortest_path(0, 3)  # path does not exist
 
         self.assertEqual(3, len(short_ans[1]))
-        # self.assertEqual(float('inf'), short_ans[0])
         self.assertEqual(0, short_ans[1][0])
         self.assertEqual(1, short_ans[1][1])
         self.assertEqual(3, short_ans[1][2])
@@ -124,7 +121,7 @@ class Test(TestCase):
 
         g1 = DiGraph()
         g_algo1 = GraphAlgo(g1)
-        g_algo1.load_from_json("data/Test2.json")
+        g_algo1.load_from_json("data/G1.json")
 
         lstTest = []
         lstTest.append(2)

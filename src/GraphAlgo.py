@@ -119,19 +119,19 @@ class GraphAlgo(GraphAlgoInterface):
         try:
             ans = []
             if self.g is None or self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
-                return float('inf'), []
+                return float('inf'), [] #as requested
             if id1 == id2:
-                return 0, [id1]
+                return 0, [id1] #if we get the sae node
 
             # dijkstra function return a dictionary with updated shortest path
             update_graph_dict = self.dijkstra(self.g.getNode(id1))
             if update_graph_dict[id2][0] == sys.maxsize:
-                return float('inf'), []
+                return float('inf'), [] #as requested
 
             curr_node_key = id2
             while curr_node_key != id1:  # go all over the dijkstra_dic
                 ans.insert(0, curr_node_key)
-                if update_graph_dict[curr_node_key][1] != 0.5:
+                if update_graph_dict[curr_node_key][1] != 0.5: #as we define before in dijkstra (the first element)
                     curr_node_key = update_graph_dict[curr_node_key][1]
                 else:
                     break
@@ -151,7 +151,7 @@ class GraphAlgo(GraphAlgoInterface):
             visitedNodes.append(currNode)  # add the current node to visitedNode list
             min_distance = sys.maxsize
             nextNode = currNode
-            if currNode in node_lst:
+            if currNode in node_lst:#if currnode is in the node_lst we will remoove it
                 node_lst.remove(currNode)
             path = []  # init ans list of nodes
 
@@ -169,7 +169,7 @@ class GraphAlgo(GraphAlgoInterface):
             for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
                 if node is not path[0]:  # add all vertices if they are not the first item in the 'path' list
                     temp.append(node)
-                    visitedNodes.append(node)
+                    visitedNodes.append(node) #add node to visitednodes list
                     if node in node_lst:
                         node_lst.remove(node)
         if len(temp) == 0:
