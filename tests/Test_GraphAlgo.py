@@ -66,7 +66,6 @@ class Test(TestCase):
         self.assertEqual(1, short_ans[1][1])
         self.assertEqual(3, short_ans[1][2])
 
-
         g1 = DiGraph()
         g_algo1 = GraphAlgo(g1)
         g_algo1.load_from_json("data/G1.json")
@@ -105,11 +104,9 @@ class Test(TestCase):
         g4 = DiGraph()
         g_algo4 = GraphAlgo(g4)
         g_algo4.load_from_json("data/emptyGraph.json")
-        lst2=g_algo4.shortest_path(0, 6)
-        self.assertEqual(float('inf'),lst2[0] );
-        self.assertEqual(0,len(lst2[1])); #the len should be 0
-
-
+        lst2 = g_algo4.shortest_path(0, 6)
+        self.assertEqual(float('inf'), lst2[0])
+        self.assertEqual(0, len(lst2[1]))  # the len should be 0
 
     def test_get_graph(self):
         g2 = DiGraph()
@@ -122,59 +119,55 @@ class Test(TestCase):
         g_algo = GraphAlgo(g)
         g_algo.load_from_json("data/Test2.json")
         lstTest = []
-        lstTest.append(g_algo.get_graph().getNode(4));
-        lstTest.append(g_algo.get_graph().getNode(2));
+        lstTest.append(g_algo.get_graph().getNode(4))
+        lstTest.append(g_algo.get_graph().getNode(2))
 
         g1 = DiGraph()
         g_algo1 = GraphAlgo(g1)
         g_algo1.load_from_json("data/Test2.json")
 
         lstTest = []
-        lstTest.append(g_algo1.get_graph().getNode(2));
-        lstTest.append(g_algo1.get_graph().getNode(5));
-        lstTest.append(g_algo1.get_graph().getNode(9));
-        list = g_algo.TSP(lstTest); #####g_algo?
+        lstTest.append(2)
+        lstTest.append(5)
+        lstTest.append(9)
+        list = g_algo1.TSP(lstTest)  #####g_algo?
 
-        self.assertEqual(2, list.get(0).get_id());
-        self.assertEqual(6, list.get(1).get_id());
-        self.assertEqual(5, list.get(2).get_id());
-        self.assertEqual(6, list.get(3).get_id());
-        self.assertEqual(7, list.get(4).get_id());
-        self.assertEqual(8, list.get(5).get_id());
-        self.assertEqual(9, list.get(6).get_id());
+        self.assertEqual(2, list[0])
+        self.assertEqual(6, list[1])
+        self.assertEqual(5, list[2])
+        self.assertEqual(6, list[3])
+        self.assertEqual(7, list[4])
+        self.assertEqual(8, list[5])
+        self.assertEqual(9, list[6])
 
         g4 = DiGraph()
         g_algo4 = GraphAlgo(g4)
         g_algo4.load_from_json("data/emptyGraph.json")
-        ans=g_algo4.TSP(lstTest)
-        self.assertEqual(0,len(ans[0]));
+        ans = g_algo4.TSP(lstTest)
+        self.assertTrue(ans is None)#the graph is empty so function return none
+
 
     def test_center(self):
         g = DiGraph()
         g_algo = GraphAlgo(g)
         g_algo.load_from_json("data/G1.json")
-        ans=g_algo.centerPoint()
-        self.assertEqual( 8,ans[0])
+        ans = g_algo.centerPoint()
+        self.assertEqual(8, ans[0])
 
         g2 = DiGraph()
         g_algo2 = GraphAlgo(g2)
         g_algo2.load_from_json("data/Test2.json")
-        self.assertEqual(3, g_algo2.centerPoint()[0]);
-
+        self.assertEqual(3, g_algo2.centerPoint()[0])
 
         g3 = DiGraph()
         g_algo3 = GraphAlgo(g3)
         g_algo3.load_from_json("data/emptyGraph.json")
-        print(g_algo3.centerPoint()[0])
-        self.assertEqual(None, g_algo3.centerPoint()[0]);
+        temp = g_algo3.centerPoint()  # [0]
+        self.assertTrue(temp is None)
 
     # BIG GRAPH DO NOT RUN
     # g4 = DiGraph()
     # g_algo4 = GraphAlgo(g4)
     # g_algo4.load_from_json("data/1000Nodes.json")
-    # self.assertEqual(362, g_algo4.center()[0]);
-
-# def test_plot_graph(self): ######## DO
-
-
+    # self.assertEqual(362, g_algo4.center()[0])
 

@@ -185,15 +185,18 @@ class GraphAlgo(GraphAlgoInterface):
 
             for currNode in self.g.get_all_v().values():  # we will moove over all nodes in the graph
                 dijk_route = self.dijkstra(currNode)
-                currMaxVal = 0;
+                currMaxVal = 0
 
                 for value in dijk_route.values():  # for each value in the dictionary
                     currVal = value[0]  # we will take the distance as currVal
                     if currMaxVal < currVal:
                         currMaxVal = currVal
                 if minMaxValue > currMaxVal:
-                    minMaxKey = currNode.get_id();
-                    minMaxValue = currMaxVal;
+                    minMaxKey = currNode.get_id()
+                    minMaxValue = currMaxVal
+
+            if minMaxValue == sys.maxsize: #could be for example in case of empty graph
+                return None
 
             return (minMaxKey, minMaxValue)
 
@@ -203,28 +206,3 @@ class GraphAlgo(GraphAlgoInterface):
     def plot_graph(self) -> None:
         gui = GUI(self.g)
         gui.init_gui()
-
-    # def centerPoint2(self) -> (int, float):
-    #     dijk_route = {}  # note that we get from dijkstra : {node_id: [distance, previous_node_id]}
-    #     # try:
-    #     minMaxKey = sys.maxsize
-    #     minMaxValue = sys.maxsize
-    #
-    #     for currNode in self.g.get_all_v().values():  # we will move over all nodes in the graph
-    #         # currNode= self.g.getNode()
-    #         map = self.dijkstra(currNode)
-    #         currMaxVal = 0
-    #
-    #         for key in map.keys():  # for each value in the dictionary
-    #             value = map.get(key)
-    #             currVal = value[0]  # we will take the distance as currVal
-    #             if currMaxVal < currVal:
-    #                 currMaxVal = currVal
-    #         if minMaxValue > currMaxVal:
-    #             minMaxKey = currNode.get_id()
-    #             minMaxValue = currMaxVal
-    #
-    #     return minMaxKey, minMaxValue
-
-    # except Exception:
-    #     return None

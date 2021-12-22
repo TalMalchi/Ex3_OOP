@@ -4,6 +4,7 @@ import pygame as pg
 from pygame.locals import *
 from src.DiGraph import DiGraph
 from src.NodeData import NodeData
+from src.GUI.Button import Button
 
 
 def init(g: DiGraph):
@@ -146,6 +147,8 @@ class GUI:
         screen.fill((255, 255, 255))  # white background
         self.draw_graph_edges(screen, screen_x_size, screen_y_size)
         self.draw_graph_nodes(screen, screen_x_size, screen_y_size)
+        button1 = Button("save", (0, 0))
+        button1.show(screen)
         pg.display.update()
 
         running = True
