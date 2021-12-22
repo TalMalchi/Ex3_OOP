@@ -108,7 +108,7 @@ class GraphAlgo(GraphAlgoInterface):
         return final_dijkstra
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        try:
+
             temp = []  # temp node list
             if len(node_lst) == 0:  # check if the node's list is empty
                 return None
@@ -164,8 +164,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         ans = []
-        if self.g is None or self.g.v_size() is 1 or self.g.v_size() is 0 or \
-                self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
+        if self.g is None or self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
             return float('inf'), []
         if id1 == id2:
             return 0, [id1]
