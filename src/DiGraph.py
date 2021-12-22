@@ -34,6 +34,9 @@ class DiGraph(GraphInterface):
     def get_all_v(self) -> dict:
         return self.Nodes
 
+    def get_edge_weight(self, src: int, dest: int):
+        return self.Edges[src][dest]
+
     def all_in_edges_of_node(self, id1: int) -> dict:
         in_edges = {}
         for curr_src_key in self.Edges.keys():  # for each src key in the dictionary

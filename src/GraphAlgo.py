@@ -138,17 +138,29 @@ class GraphAlgo(GraphAlgoInterface):
                 return None
 
             return temp
-        except Exception:
-            print("Invalid graph for TSP on these cities!")
-            return None
 
-    # def centerPoint(self) -> (int, float):
-    #     try:
-    #         minMaxKey= sys.maxsize
-    #         minMaxValue=sys.maxsize
-    #         for node in self.g.get_all_v().:
-    #             currNode =
-    #             map= self.dijkstra()
+    def centerPoint(self) -> (int, float):
+        dijk_route = {}  # remember that we get from dijkstra : {node_id: [distance, previous_node_id]}
+        try:
+            minMaxKey = sys.maxsize
+            minMaxValue = sys.maxsize
+            for currNode in self.g.get_all_v().values():  # we will moove over all nodes in the graph
+                dijk_route = self.dijkstra(currNode)
+                currMaxVal = 0;
+
+                # for key in dijk_route.keys():
+                for value in dijk_route.values():  # for each value in the dictionary
+                    currVal = value[0]  # we will take the distance as currVal
+                    if currMaxVal < currVal:
+                        currMaxVal = currVal
+                if minMaxValue > currMaxVal:
+                    minMaxKey = currNode.get_id();
+                    minMaxValue = currMaxVal;
+
+            return (self.g.getNode(minMaxKey).get_id(), minMaxValue)
+
+        except Exception:
+            return None
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         ans = []
@@ -158,16 +170,20 @@ class GraphAlgo(GraphAlgoInterface):
         if id1 == id2:
             return 0, [id1]
         else:
-            update_graph_dic = self.dijkstra(self,
-                                             id1)  # dijkstra function return a dictionary with updated shortest path
-            n = self.g.getNode(id2)  # get shortest path from id2
-            i = id2
-            # for i in update_graph_dic:  # go all over the dijkstra_dic
-            while i is not -1:
-                ans.append(i)  # add to the list all the nodes that append after id2
-                i = update_graph_dic.get(i)
-            ans.reverse()  # reverse the list
-        return n.get_weight, ans
+            update_graph_dict = self.dijkstra(
+                self.g.get_all_v()[1])  # dijkstra function return a dictionary with updated shortest path
+            if update_graph_dict[id2][0] == sys.maxsize:
+                return float('inf'), []
+
+        curr_node_key = id2
+        while curr_node_key != id1:  # go all over the dijkstra_dic
+            ans.insert(0, curr_node_key)
+            if update_graph_dict[curr_node_key][1] != 0.5:
+                curr_node_key = update_graph_dict[curr_node_key][1]
+            else:
+                break
+        ans.insert(0, id1)  # add to the list all the nodes that append after id2
+        return update_graph_dict[id2][0], ans
 
     def plot_graph(self) -> None:
         gui = GUI(self.g)

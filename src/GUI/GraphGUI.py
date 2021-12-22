@@ -24,6 +24,18 @@ def normalize_y(screen_y_size, currNodeVal) -> float:
 def distance(point1, point2) -> float:
     return math.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
 
+def get_away_from_edge_of_screen(x, y, screen_x_size, screen_y_size):
+    if y < 5:
+        y += 15
+        x += 15
+    if x > screen_x_size - 5:
+        x -= 15
+        y -= 15
+    if y > screen_y_size - 5:
+        y -= 15
+        x += 15
+    return x, y
+
 
 def drawArrowForEdge(screen, screen_x_size, screen_y_size, src_node_x, src_node_y, dest_node_x, dest_node_y):
     """Function to draw an arrowhead in the direction of the line
@@ -61,15 +73,7 @@ class GUI:
             pg.draw.circle(screen, (0, 0, 0), (x, y), GUI.circle_rad)
 
             y -= 15
-            if y < 5:
-                y += 15
-                x += 15
-            if x > screen_x_size - 5:
-                x -= 15
-                y -= 15
-            if y > screen_y_size - 5:
-                y -= 15
-                x += 15
+            x, y = get_away_from_edge_of_screen(x, y, screen_x_size, screen_y_size)
             font = pg.font.SysFont('Arial', 20)
             text = font.render(str(node.get_id()), True, (255, 0, 0))
             text_rect = text.get_rect()
@@ -78,7 +82,7 @@ class GUI:
 
     def draw_graph_edges(self, screen, screen_x_size, screen_y_size):
         for edgeSrcID in self.graph.get_all_v().keys():
-            for edgeDestID in self.graph.all_out_edges_of_node(edgeSrcID):
+            for edgeDestID in self.graph.all_out_edges_of_node(edgeSrcID).keys():
                 src_node = self.graph.getNode(edgeSrcID)
                 src_node_x = src_node.get_x()
                 src_node_y = src_node.get_y()
@@ -113,6 +117,26 @@ class GUI:
 
                 pg.draw.line(screen, (0, 0, 0), (src_node_x, src_node_y), (dest_node_x, dest_node_y), 2)
                 drawArrowForEdge(screen, screen_x_size, screen_y_size, src_node_x, src_node_y, dest_node_x, dest_node_y)
+
+                x1 = ((2 * src_node_y * b) - (
+                        2 * dest_node_y * b) + dest_node_y ** 2 - src_node_y ** 2 + dest_node_x ** 2 - src_node_x ** 2) / (
+                             (2 * m * dest_node_y) - (2 * m * src_node_y) - (2 * src_node_x) - (2 * dest_node_x))
+                y1 = (m*x1) + b
+
+                if m >= 0:
+                    x1 -= 15
+                    y1 += 15
+                    x1, y1 = get_away_from_edge_of_screen(x1, y1, screen_x_size, screen_y_size)
+                else:
+                    x1 += 15
+                    y1 -= 15
+                    x1, y1 = get_away_from_edge_of_screen(x1, y1, screen_x_size, screen_y_size)
+
+                font = pg.font.SysFont('Arial', 12)
+                text = font.render(str(round(self.graph.get_edge_weight(edgeSrcID, edgeDestID), 3)), True, (255, 0, 0))
+                text_rect = text.get_rect()
+                text_rect.center = (x1, y1)
+                screen.blit(text, text_rect)
 
     def init_gui(self):
         pg.init()
