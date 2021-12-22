@@ -87,6 +87,7 @@ class DiGraph(GraphInterface):
             self.Edges.pop(node_id)  # remove edges FROM node_id
         for curr_src in self.all_in_edges_of_node(node_id).keys():
             self.remove_edge(curr_src, node_id)  # remove edges TO node_id
+            self.edge_size -= 1
         self.Nodes.pop(node_id)  # remove node
         self.mc += 1
         return True
