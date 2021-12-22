@@ -5,7 +5,6 @@ from typing import List
 from src.GraphAlgoInterface import GraphAlgoInterface
 from src.DiGraph import DiGraph
 import heapq
-
 from src import GraphInterface
 from src.GUI.GraphGUI import GUI
 
