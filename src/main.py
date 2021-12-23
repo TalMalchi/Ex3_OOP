@@ -1,9 +1,6 @@
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
-from tests.Test_DiGraph import Test
-
-
-# from src.GraphGUI import GUI as GUI
+from Test_DiGraph import Test
 
 
 def check():
@@ -54,9 +51,7 @@ def check0():
     g_algo.save_to_json("output.json")
     g_algo.load_from_json("output.json")
     g_algo.plot_graph()
-    print()
     print(g_algo.shortest_path(0, 3))
-    # g_algo.plot_graph()
 
 
 def check1():
