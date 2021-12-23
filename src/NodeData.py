@@ -61,13 +61,15 @@ class NodeData:
     def get_weight(self, neighbor):
         return self.adjacent[neighbor]
 
-    def set_previous(self, prev):#node1.set_previous(cur) -> set cur as previous node of node1
+    def set_previous(self, prev):
+        """node1.set_previous(cur) -> set cur as previous node of node1"""
         self.previous = prev
 
     def set_distance(self, dist):
         self.distance = dist
 
-    def get_previous(self, current):#get previous node of given node
+    def get_previous(self, current):
+        """get previous node of given node"""
         return self.previous
 
     def __str__(self):
