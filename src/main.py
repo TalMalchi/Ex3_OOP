@@ -65,7 +65,7 @@ def check1():
     print(g_algo.shortest_path(0, 3))
     print(g_algo.shortest_path(3, 1))
     print(g_algo.centerPoint())
-    g_algo.save_to_json(file + '_saved')
+    g_algo.save_to_json('../data/T0_saved.json')
     g_algo.plot_graph()
 
 
@@ -113,17 +113,17 @@ def check3():
 
 
 if __name__ == '__main__':
-    # check0()
-    g = DiGraph()
-    g_algo = GraphAlgo(g)
-    g_algo.load_from_json("data/G1.json")
-    # gr = Test().initGr()
-    # g_algo.g = gr
-    g_algo.plot_graph()
-    # print(g_algo.dijkstra(g_algo.g.getNode(1)))
-    # print(g_algo.shortest_path(5, 9))
-    # print(g_algo.TSP([2, 5, 9]))
-    # print(g_algo.centerPoint())
-
-    # gui = GUI(g_algo.g)
-    # gui.init_gui()
+    check2()
+    # g = DiGraph()
+    # g_algo = GraphAlgo(g)
+    # g_algo.load_from_json("data/G1.json")
+    # # gr = Test().initGr()
+    # # g_algo.g = gr
+    # g_algo.plot_graph()
+    # # print(g_algo.dijkstra(g_algo.g.getNode(1)))
+    # # print(g_algo.shortest_path(5, 9))
+    # # print(g_algo.TSP([2, 5, 9]))
+    # # print(g_algo.centerPoint())
+    #
+    # # gui = GUI(g_algo.g)
+    # # gui.init_gui()

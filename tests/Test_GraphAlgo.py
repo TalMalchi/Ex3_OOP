@@ -167,4 +167,3 @@ class Test(TestCase):
     # g_algo4 = GraphAlgo(g4)
     # g_algo4.load_from_json("data/1000Nodes.json")
     # self.assertEqual(362, g_algo4.center()[0])
-

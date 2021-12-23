@@ -63,19 +63,19 @@ class DiGraph(GraphInterface):
         if id1 in self.Edges:  # source node dict exists
             self.Edges.get(id1).update({id2: weight})
         else:  # source node dict doesn't exists
-            self.Edges.update({id1: {id2: weight}})#add new edge to the edge dictionary
-        self.edge_size += 1 #add edge to the graph
-        self.mc += 1 #change the state of the graph
+            self.Edges.update({id1: {id2: weight}})  # add new edge to the edge dictionary
+        self.edge_size += 1  # add edge to the graph
+        self.mc += 1  # change the state of the graph
         return True
 
-    def add_node(self, node_id: int, pos: tuple = None) -> bool:
+    def add_node(self, node_id: int, pos=None) -> bool:
         if pos is None:
             pos = str(random.randint(0, 100)) + ',' + str(random.randint(0, 100)) + ',' + str(0)
-        if node_id in self.Nodes: #if node already exist, we will not add it
+        if node_id in self.Nodes:  # if node already exist, we will not add it
             return False
         temp = NodeData(pos, node_id)
-        self.Nodes.update({node_id: temp}) #add new node to the edge dictionary
-        self.mc += 1 #change the state of the graph
+        self.Nodes.update({node_id: temp})  # add new node to the edge dictionary
+        self.mc += 1  # change the state of the graph
         return True
 
     def remove_node(self, node_id: int) -> bool:
@@ -86,10 +86,9 @@ class DiGraph(GraphInterface):
             self.edge_size -= len(self.all_out_edges_of_node(node_id))
             self.Edges.pop(node_id)  # remove edges FROM node_id
         for curr_src in self.all_in_edges_of_node(node_id).keys():
-            self.remove_edge(curr_src, node_id)  # remove edges TO node_id
-            self.edge_size -= 1 #decrease the number of edges in graph by 1
+            self.remove_edge(curr_src, node_id)  # remove edges TO
         self.Nodes.pop(node_id)  # remove node
-        self.mc += 1#change the state of the graph
+        self.mc += 1  # change the state of the graph
         return True
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
@@ -99,8 +98,8 @@ class DiGraph(GraphInterface):
             self.Edges.pop(node_id1)  # remove the src node itself
         else:
             self.Edges[node_id1].pop(node_id2)
-        self.edge_size -= 1 #decrease the number of edges in graph by 1
-        self.mc += 1#change the state of the graph
+        self.edge_size -= 1  # decrease the number of edges in graph by 1
+        self.mc += 1  # change the state of the graph
         return True
 
     def toJSON(self):

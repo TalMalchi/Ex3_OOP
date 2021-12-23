@@ -1,13 +1,15 @@
 import math
 import sys
+import tkinter as tk
+from tkinter.filedialog import askopenfilename
 
-from src.GUI.Menu import *
 import pygame as pg
 from pygame.locals import *
-from src.GraphAlgo import GraphAlgo
-from src.NodeData import NodeData
+
 from src.GUI.Button import Button
 from src.GUI.InputField import InputField
+from src.GraphAlgo import GraphAlgo
+from src.NodeData import NodeData
 
 
 def init(g: GraphAlgo):
@@ -125,7 +127,7 @@ class GUI:
 
         # Below we find the point on the edge that ends at the circles' circumference, so that the arrow does not
         # seem "inside" the node
-        m = (dest_node_y - src_node_y) / (dest_node_x - src_node_x) # m in the linear function y = mx + b
+        m = (dest_node_y - src_node_y) / (dest_node_x - src_node_x)  # m in the linear function y = mx + b
         b = dest_node_y - (m * dest_node_x)  # b in the linear function y = mx + b
 
         # After calculations, the needed values to be passed to the quadratic equations
@@ -135,7 +137,7 @@ class GUI:
                 (GUI.circle_rad + 5) ** 2))
         x1, x2 = quadratic(a1, b1, c1)
 
-        #Correlating y values to each of the x values
+        # Correlating y values to each of the x values
         y1 = (m * x1) + b
         y2 = (m * x2) + b
         point1 = [x1, y1]
@@ -157,8 +159,11 @@ class GUI:
     def draw_graph_edges(self, screen, screen_x_size, screen_y_size):
         """Function to iterate and plot all edges of the graph """
         for edgeSrcID in self.graph.get_graph().get_all_v().keys():
-            for edgeDestID in self.graph.get_graph().all_out_edges_of_node(edgeSrcID).keys():
-                self.draw_one_edge(screen, screen_x_size, screen_y_size, edgeSrcID, edgeDestID, (0, 0, 0))
+            try:
+                for edgeDestID in self.graph.get_graph().all_out_edges_of_node(edgeSrcID).keys():
+                    self.draw_one_edge(screen, screen_x_size, screen_y_size, edgeSrcID, edgeDestID, (0, 0, 0))
+            except:
+                continue
 
     def redraw(self, screen, screen_x_size, screen_y_size):
         """After a change has been made, a method to replot the graph and the buttons"""
@@ -172,6 +177,7 @@ class GUI:
         self.button_short_path.show(screen)
         self.button_TSP.show(screen)
         pg.display.update()
+        return sys.maxsize  # Initializing timer
 
     def init_gui(self):
         pg.init()
@@ -187,9 +193,7 @@ class GUI:
         self.button_center = Button("Center Point", ((self.button_load.size[0] + self.button_load.x + 3), 0))
         self.button_short_path = Button("Shortest Path", ((self.button_center.size[0] + self.button_center.x + 3), 0))
         self.button_TSP = Button("TSP", ((self.button_short_path.size[0] + self.button_short_path.x + 3), 0))
-        self.redraw(screen, screen_x_size, screen_y_size)
-
-        start_timer = sys.maxsize  # Initializing timer
+        start_timer = self.redraw(screen, screen_x_size, screen_y_size)
 
         # Initializing input fields
         input_box_short_path = InputField(self.button_load.x, self.button_load.y + self.button_load.size[1], 140, 32)
@@ -206,7 +210,7 @@ class GUI:
                 if event.type == pg.QUIT:  # user closed window
                     running = False
                 elif event.type == VIDEORESIZE:  # If the window was resized
-                    self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                    start_timer = self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
                     clock.tick(30)  # plays up to 30 fps
                     pg.display.update()
                 elif self.button_load.click(event):  # Load Button functionality
@@ -214,9 +218,9 @@ class GUI:
                     tk_root.withdraw()
                     string = askopenfilename(filetypes=[("json", "*.json")])
                     self.graph.load_from_json(string)
-                    self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                    start_timer = self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
                 elif self.button_center.click(event):  # Center button functionality
-                    self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                    start_timer = self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
                     center = self.graph.centerPoint()  # Calling the function to calculate the center point
                     id = center[0]
                     node = self.graph.get_graph().getNode(id)
@@ -261,17 +265,20 @@ class GUI:
             if input_box_short_path.final_text != "":
                 string_lst = input_box_short_path.final_text.split(' ')
                 input_box_short_path.final_text = ""
-                self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                start_timer = self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+
+                # If the user input something invalid, print a corresponding error to the screen
                 if len(string_lst) != 2:
                     start_timer = self.display_temp_text(screen, "Incorrect input!",
                                                          (input_box_short_path.x,
                                                           input_box_short_path.y + input_box_short_path.h * 1.5))
                 else:
+                    # Printing the results if all input is OK
                     short_path_result = self.graph.shortest_path(int(string_lst[0]), int(string_lst[1]))
                     if short_path_result[0] == float('inf'):
                         string = "A path between the two nodes was not found"
                     else:
-                        for i in range(1, len(short_path_result[1])):
+                        for i in range(1, len(short_path_result[1])):  # plotting edges in red colour
                             self.draw_one_edge(screen, pg.display.Info().current_w, pg.display.Info().current_h,
                                                int(short_path_result[1][i - 1]), int(short_path_result[1][i]),
                                                (255, 0, 0))
@@ -280,18 +287,21 @@ class GUI:
                     start_timer = self.display_temp_text(screen, string, (
                         input_box_short_path.x, input_box_short_path.y + input_box_short_path.h * 1.5))
 
+            # if the input box of the TSP has ended its loop, and it is not empty
             if input_box_tsp.final_text != "":
-                string_lst = input_box_tsp.final_text.split(' ')
+                string_lst = input_box_tsp.final_text.split(' ')  # Split the string received
                 id_lst = []
-                for i in range(len(string_lst)):
+                for i in range(len(string_lst)):  # Convert string list to int list
                     id_lst.append(int(string_lst[i]))
-                input_box_tsp.final_text = ""
-                self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                input_box_tsp.final_text = ""  # Revert changes made to the input field
+                start_timer = self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
                 tsp_result = self.graph.TSP(id_lst)
+
+                # There is no viable path
                 if float(tsp_result[1]) == float('inf'):
                     string = "A path between the nodes was not found"
                 else:
-                    for i in range(1, len(tsp_result[0])):
+                    for i in range(1, len(tsp_result[0])):  # Plotting edges in different colour
                         self.draw_one_edge(screen, pg.display.Info().current_w, pg.display.Info().current_h,
                                            int(tsp_result[0][i - 1]), int(tsp_result[0][i]), (255, 0, 0))
                     string = "The shortest path between the list of nodes was coloured red, its weight is: " + str(
@@ -300,6 +310,7 @@ class GUI:
                                                      (input_box_tsp.x, input_box_tsp.y + input_box_tsp.h * 1.5))
             pg.display.update()
 
+            # Display all texts for 4 seconds
             seconds = (pg.time.get_ticks() - start_timer) / 1000  # calculate how many seconds
             if seconds > 4:
-                self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)
+                start_timer = self.redraw(screen, pg.display.Info().current_w, pg.display.Info().current_h)

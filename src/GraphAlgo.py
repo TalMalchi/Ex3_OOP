@@ -10,11 +10,40 @@ from src import GraphInterface
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, g: DiGraph):
-        self.g = g
+    def __init__(self, g=None):
+        if g is not None:
+            self.g = g
+        else:
+            self.g = DiGraph()
 
     def get_graph(self) -> GraphInterface:
         return self.g
+
+    def load_from_json(self, file_name: str) -> bool:
+        try:
+            if file_name[0] == '.':
+                file_name = file_name[1:]
+            if file_name[0] == '.':
+                file_name = file_name[1:]
+            self.g = DiGraph()
+            root_dir = os.path.dirname(os.path.abspath(__file__))[:-4]
+            #path = os.path.join(root_dir, file_name)
+            path = root_dir + file_name
+            with open(path) as f:
+                data = f.read()
+                graph_algo = json.loads(data)
+                for node in graph_algo["Nodes"]:
+                    try:
+                        self.g.add_node(node["id"], node["pos"])
+                    except Exception:
+                        self.g.add_node(node["id"])
+
+                for edge in graph_algo["Edges"]:
+                    self.g.add_edge(edge["src"], edge["dest"], edge["w"])
+
+        except IOError as e:
+            return False
+        return True
 
     def load_from_json(self, file_name: str) -> bool:
         try:
@@ -35,6 +64,13 @@ class GraphAlgo(GraphAlgoInterface):
         return True
 
     def save_to_json(self, file_name: str) -> bool:
+        if file_name[0] == '.':
+            file_name = file_name[1:]
+        if file_name[0] == '.':
+            file_name = file_name[1:]
+        if file_name[-5:] != '.json':
+            file_name += '.json'
+
         try:
             if self.g is None:
                 return False
@@ -42,8 +78,11 @@ class GraphAlgo(GraphAlgoInterface):
             # add edges to list
             edges = []
             for n in self.g.get_all_v().keys():
-                for dest in self.g.all_out_edges_of_node(n):
-                    edges.append({"src": n, "dest": dest, "w": self.g.all_out_edges_of_node(n).get(dest)})
+                try:
+                    for dest in self.g.all_out_edges_of_node(n):
+                        edges.append({"src": n, "dest": dest, "w": self.g.get_edge_weight(n, dest)})
+                except Exception:
+                    continue
 
             # add nodes to list
             nodes = []
@@ -51,11 +90,10 @@ class GraphAlgo(GraphAlgoInterface):
                 nodes.append({"id": key, "pos": self.g.get_all_v()[key].get_pos()})
 
             saved_graph = {"Nodes": nodes, "Edges": edges}
-            with open(file_name, 'w') as json_file:
+            with open(os.path.dirname(os.path.abspath(__file__))[:-4] + file_name, 'w') as json_file:
                 json.dump(saved_graph, json_file)
 
         except IOError as e:
-            print(e)
             return False
         return True
 
