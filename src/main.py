@@ -1,5 +1,6 @@
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
+from tests.Test_DiGraph import Test
 
 
 # from src.GraphGUI import GUI as GUI
@@ -120,11 +121,13 @@ if __name__ == '__main__':
     # check0()
     g = DiGraph()
     g_algo = GraphAlgo(g)
-    g_algo.load_from_json("G1.json")
+    g_algo.load_from_json("data/G1.json")
+    # gr = Test().initGr()
+    # g_algo.g = gr
     g_algo.plot_graph()
-   #print(g_algo.dijkstra(g_algo.g.getNode(0)))
-    #print(g_algo.shortest_path(2, 20))
-    #print(g_algo.TSP([2, 5, 9]))
+    # print(g_algo.dijkstra(g_algo.g.getNode(1)))
+    # print(g_algo.shortest_path(5, 9))
+    # print(g_algo.TSP([2, 5, 9]))
     # print(g_algo.centerPoint())
 
     # gui = GUI(g_algo.g)
