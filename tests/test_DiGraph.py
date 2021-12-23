@@ -1,6 +1,7 @@
 from unittest import TestCase
 from src.DiGraph import DiGraph
-from src.NodeData import NodeData
+# from src.GraphInterface import GraphInterface
+# from src.NodeData import NodeData
 
 
 def createGraph():
@@ -41,6 +42,9 @@ class Test(TestCase):
     # def test_di_graph(self):
     #     self.fail()
 
+    def initGr(self):
+        return createGraph()
+
     def test_getNode(self):
         gr = createGraph()
         self.assertEqual(0, gr.getNode(0).get_id())
@@ -57,7 +61,7 @@ class Test(TestCase):
     def test_get_all_v(self):
         gr= createGraph()
         v = gr.get_all_v()
-        self.assertEqual(11, v.__len__ ())
+        self.assertEqual(11, v.__len__())
 
     def test_all_in_edges_of_node(self):
         gr= createGraph()
@@ -110,7 +114,7 @@ class Test(TestCase):
         self.assertEqual(10, gr.v_size())
         self.assertEqual(16, gr.e_size())
         gr.remove_node(8)
-        self.assertEqual(14, gr.e_size())
+        self.assertEqual(15, gr.e_size())
 
 
 
