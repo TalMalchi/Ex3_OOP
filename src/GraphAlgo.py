@@ -45,23 +45,23 @@ class GraphAlgo(GraphAlgoInterface):
             return False
         return True
 
-    def load_from_json(self, file_name: str) -> bool:
-        try:
-            self.g = DiGraph()
-            root_dir = os.path.dirname(os.path.abspath(__file__))[:-4]
-            path = os.path.join(root_dir, file_name)
-            with open(path) as f:
-                data = f.read()
-                graph_algo = json.loads(data)
-                for node in graph_algo["Nodes"]:
-                    self.g.add_node(node["id"], node["pos"])
-                for edge in graph_algo["Edges"]:
-                    self.g.add_edge(edge["src"], edge["dest"], edge["w"])
-
-        except IOError as e:
-            print(e)
-            return False
-        return True
+    # def load_from_json(self, file_name: str) -> bool:
+    #     try:
+    #         self.g = DiGraph()
+    #         root_dir = os.path.dirname(os.path.abspath(__file__))[:-4]
+    #         path = os.path.join(root_dir, file_name)
+    #         with open(path) as f:
+    #             data = f.read()
+    #             graph_algo = json.loads(data)
+    #             for node in graph_algo["Nodes"]:
+    #                 self.g.add_node(node["id"], node["pos"])
+    #             for edge in graph_algo["Edges"]:
+    #                 self.g.add_edge(edge["src"], edge["dest"], edge["w"])
+    #
+    #     except IOError as e:
+    #         print(e)
+    #         return False
+    #     return True
 
     def save_to_json(self, file_name: str) -> bool:
         if file_name[0] == '.':
@@ -180,6 +180,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         temp = []  # temp node list
+        weight = 0
         if len(node_lst) == 0:  # check if the node's list is empty
             return None
         currNode = node_lst[0]
@@ -212,8 +213,10 @@ class GraphAlgo(GraphAlgoInterface):
                         node_lst.remove(node)
         if len(temp) == 0:
             return None
-        # TODO: bug here, returned 1 temporarily
-        return temp, 1
+        for index in range(len(temp) - 1):
+            weight = weight + self.g.get_edge_weight(temp[index], temp[index + 1])
+
+        return temp, weight
 
     def centerPoint(self) -> (int, float):
         dijk_route = {}  # note that we get from dijkstra : {node_id: [distance, previous_node_id]}

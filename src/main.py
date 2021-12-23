@@ -53,7 +53,6 @@ def check0():
     g_algo.plot_graph()
     print(g_algo.shortest_path(0, 3))
 
-
 def check1():
     """
        This function tests the naming (main methods of the GraphAlgo class, as defined in GraphAlgoInterface.

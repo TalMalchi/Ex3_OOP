@@ -25,15 +25,19 @@ class DiGraph(GraphInterface):
         self.mc = 0
 
     def v_size(self) -> int:
-        return len(self.Nodes) #return the number of nodes are in the graph
+        """return the number of nodes are in the graph"""
+        return len(self.Nodes)
 
-    def getNode(self, key):#get node by id
+    def getNode(self, key):
+        """get node by id"""
         return self.Nodes.get(key, None)
 
-    def get_all_v(self) -> dict:#get all v in graph
+    def get_all_v(self) -> dict:
+        """get all v in graph"""
         return self.Nodes
 
-    def get_edge_weight(self, src: int, dest: int):#get edge and return it weight
+    def get_edge_weight(self, src: int, dest: int):
+        """get edge and return it weight"""
         return self.Edges[src][dest]
 
     def all_in_edges_of_node(self, id1: int) -> dict:
@@ -46,13 +50,15 @@ class DiGraph(GraphInterface):
                 #         self.Edges[key][innerkey]  #weight
         return in_edges
 
-    def all_out_edges_of_node(self, id1: int) -> dict:#get id of node and return dictionary of all edges OUT from it{src:{dest:weight}}
+    def all_out_edges_of_node(self, id1: int) -> dict:
+        """get id of node and return dictionary of all edges OUT from it{src:{dest:weight}}"""
         return self.Edges[id1]
 
     def e_size(self) -> int:
         return self.edge_size
 
-    def get_mc(self) -> int:#number of states the graph has changed
+    def get_mc(self) -> int:
+        """return the number of states the graph has changed"""
         return self.mc
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:

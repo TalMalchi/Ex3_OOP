@@ -37,22 +37,27 @@ class NodeData:
         self.visited = False  # Mark all nodes as unvisited
         self.previous = None
 
-    def get_visited(self):#get visited to see the status of the visited attribute of the node
+    def get_visited(self):
+        """get visited to see the status of the visited attribute of the node"""
         return self.visited
 
-    def get_id(self) -> int:#get id of node
+    def get_id(self) -> int:
+        """get id of node"""
         return self.id
 
     def get_distance(self):
         return self.distance
 
-    def get_x(self):#get x val of node position
+    def get_x(self):
+        """get x val of node position"""
         return self.x
 
-    def get_y(self):#get y val of node position
+    def get_y(self):
+        """get y val of node position"""
         return self.y
 
-    def get_z(self):#get z val of node position
+    def get_z(self):
+        """get z val of node position"""
         return self.z
 
     def get_pos(self):
@@ -76,7 +81,8 @@ class NodeData:
         """for debugging purposes only"""
         return str("id: " + str(self.id) + " pos: " + str(self.x) + ',' + str(self.y) + ',' + str(self.z))
 
-    def set_visited(self):#initilizes attribute as defoltive true boolean value
+    def set_visited(self):
+        """initilizes attribute as defoltive true boolean value"""
         self.visited = True
 
 #for using heapq.heapify in GraphAlgo-we will define comperators
