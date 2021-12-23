@@ -50,7 +50,7 @@ class DiGraph(GraphInterface):
         return self.Edges[id1]
 
     def e_size(self) -> int:
-        return self.edge_sedgesize
+        return self.edge_size
 
     def get_mc(self) -> int:#number of states the graph has changed
         return self.mc
