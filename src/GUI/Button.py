@@ -3,6 +3,7 @@ from typing import Tuple
 
 
 class Button:
+    """adapted from: https://pythonprogramming.altervista.org/buttons-in-pygame/?doing_wp_cron=1640112829.2162640094757080078125"""
     """Create a button, then blit the surface in the while loop"""
 
     def __init__(self, text, pos: Tuple[int, int], bg=(200, 200, 200)):

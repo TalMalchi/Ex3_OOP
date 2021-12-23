@@ -6,7 +6,6 @@ from src.GraphAlgoInterface import GraphAlgoInterface
 from src.DiGraph import DiGraph
 import heapq
 from src import GraphInterface
-from src.GUI.GraphGUI import GUI
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -118,20 +117,21 @@ class GraphAlgo(GraphAlgoInterface):
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         try:
             ans = []
-            if self.g is None or self.g.getNode(id1) is None or self.g.getNode(id2) is None:  # check if there is no path
-                return float('inf'), [] #as requested
+            if self.g is None or self.g.getNode(id1) is None or self.g.getNode(
+                    id2) is None:  # check if there is no path
+                return float('inf'), []  # as requested
             if id1 == id2:
-                return 0, [id1] #if we get the sae node
+                return 0, [id1]  # if we get the sae node
 
             # dijkstra function return a dictionary with updated shortest path
             update_graph_dict = self.dijkstra(self.g.getNode(id1))
             if update_graph_dict[id2][0] == sys.maxsize:
-                return float('inf'), [] #as requested
+                return float('inf'), []  # as requested
 
             curr_node_key = id2
             while curr_node_key != id1:  # go all over the dijkstra_dic
                 ans.insert(0, curr_node_key)
-                if update_graph_dict[curr_node_key][1] != 0.5: #as we define before in dijkstra (the first element)
+                if update_graph_dict[curr_node_key][1] != 0.5:  # as we define before in dijkstra (the first element)
                     curr_node_key = update_graph_dict[curr_node_key][1]
                 else:
                     break
@@ -151,7 +151,7 @@ class GraphAlgo(GraphAlgoInterface):
             visitedNodes.append(currNode)  # add the current node to visitedNode list
             min_distance = sys.maxsize
             nextNode = currNode
-            if currNode in node_lst:#if currnode is in the node_lst we will remoove it
+            if currNode in node_lst:  # if currnode is in the node_lst we will remoove it
                 node_lst.remove(currNode)
             path = []  # init ans list of nodes
 
@@ -169,13 +169,13 @@ class GraphAlgo(GraphAlgoInterface):
             for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
                 if node is not path[0]:  # add all vertices if they are not the first item in the 'path' list
                     temp.append(node)
-                    visitedNodes.append(node) #add node to visitednodes list
+                    visitedNodes.append(node)  # add node to visitednodes list
                     if node in node_lst:
                         node_lst.remove(node)
         if len(temp) == 0:
             return None
-
-        return temp
+        # TODO: bug here, returned 1 temporarily
+        return temp, 1
 
     def centerPoint(self) -> (int, float):
         dijk_route = {}  # note that we get from dijkstra : {node_id: [distance, previous_node_id]}
@@ -195,7 +195,7 @@ class GraphAlgo(GraphAlgoInterface):
                     minMaxKey = currNode.get_id()
                     minMaxValue = currMaxVal
 
-            if minMaxValue == sys.maxsize: #could be for example in case of empty graph
+            if minMaxValue == sys.maxsize:  # could be for example in case of empty graph
                 return None
 
             return (minMaxKey, minMaxValue)
@@ -204,5 +204,6 @@ class GraphAlgo(GraphAlgoInterface):
             return None
 
     def plot_graph(self) -> None:
-        gui = GUI(self.g)
+        from src.GUI.GraphGUI import GUI
+        gui = GUI(self)
         gui.init_gui()
