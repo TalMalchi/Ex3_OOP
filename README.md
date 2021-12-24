@@ -4,6 +4,8 @@ In this assigment, we were tasked to recreate our work from the previous assignm
 Again, our task is to create a program to save, load, and perform various other different actions on directed weighted
 graphs. In addition, the graph has to have a UI to present it to the user.
 
+Note: a requirements file has been added to the repository, so that running the program can be done with less hassle.
+
 ## Classes and Algorithms
 We received several abstract classes to implement (as if interfaces in Java), as well as some json files to test the
 algorithms on. The graph is to be built from json and be able to be written to json. The UML of class structure is
@@ -19,5 +21,3 @@ can be viewed here.
 In this Part,  we were required to make a comparison of running time between implementations in Python and Java.
 The results show the running times between 4 different directed weighted graphs and 4 different algorithms.
 You can see the results in this [wiki](https://github.com/TalMalchi/Ex3_OOP.wiki.git)!
-
-Note: a requirements file has been added to the repository, so that running the program can be done with less hassle.
