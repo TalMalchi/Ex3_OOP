@@ -14,3 +14,10 @@ To test the correctness of the program and its functions, several tests were run
 tests, a comparison test between the outputs of this program and the program written in Java, for those tests which are
 difficult to compute by hand. A detailed comparison between the two sets of algorithms, including runtime comparisons,
 can be viewed here.
+
+
+|                        | is Connected           | Shortest Path Distance | Shortest Path      | Center         | TSP (for 6 cities) |
+| ---------------------- | ---------------------- | ---------------------- | ------------------ | -------------- | ------------------ |
+| 1,000 Nodes            | 0.215                  | 0.211                  | 0.222              | 2.09           | 0.344              |
+| 10,000 Nodes           | 0.914                  | 0.996                  | 0.987              | 27 min, 34 sec | 4.747              |
+| 100,000 Nodes          | 16.421                 | 68                     | 71                 | Timeout        | 21 min, 31 sec     |
