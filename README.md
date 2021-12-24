@@ -20,3 +20,8 @@ In this Part,  we were required to make a comparison of running time between imp
 The results show the running times between 4 different directed weighted graphs and 4 different algorithms.  
 You can see the results in this [wiki](https://github.com/TalMalchi/Ex3_OOP.wiki.git)!
 
+## Part 3:
+![check2](https://user-images.githubusercontent.com/93086649/147354562-e7313c3f-7ada-48c3-9233-6aaf54914079.jpeg)
+
+
+
