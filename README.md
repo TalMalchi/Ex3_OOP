@@ -2,7 +2,7 @@
 ## Preface
 In this assigment, we were tasked to recreate our work from the previous assignment (written in JAVA) to Python.
 Again, our task is to create a program to save, load, and perform various other different actions on directed weighted
-graphs. In addition, the graph has to have a UI to present it to the user. How to use the UI can be seen here
+graphs. In addition, the graph has to have a UI to present it to the user. How to use the UI can be seen [here](https://github.com/TalMalchi/Ex3_OOP/wiki/Using-the-GUI).
 
 Note: a requirements file has been added to the repository, so that running the program can be done with less hassle.
 
