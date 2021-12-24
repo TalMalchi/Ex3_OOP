@@ -3,21 +3,21 @@
   <ID>Python</ID>
   <OriginalElement>#C:/Users/Tal/PycharmProjects/pythonProject1/src/DiGraph.py</OriginalElement>
   <nodes>
-    <node x="-362.5403225806452" y="0.0">src.DiGraph.DiGraph</node>
-    <node x="63.10887096774195" y="13.427419354838719">src.GraphInterface.GraphInterface</node>
+    <node x="-362.5403225806452" y="22.01494682379996">src.DiGraph.DiGraph</node>
+    <node x="-26.865259529527407" y="0.0">src.GraphInterface.GraphInterface</node>
   </nodes>
   <notes />
   <edges>
     <edge source="src.DiGraph.DiGraph" target="src.GraphInterface.GraphInterface" relationship="REALIZATION">
       <point x="0.0" y="-171.0" />
       <point x="-221.04032258064518" y="279.0" />
-      <point x="204.60887096774195" y="279.0" />
+      <point x="114.6347404704726" y="279.0" />
       <point x="0.0" y="127.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic" zoom="0.7447447447447447" showDependencies="false" x="142.0" y="323.0" />
+  <settings layout="Hierarchic" zoom="1.0447447447447447" showDependencies="false" x="-47.00000000000006" y="242.0" />
   <SelectedNodes>
-    <node>src.GraphInterface.GraphInterface</node>
+    <node>src.DiGraph.DiGraph</node>
   </SelectedNodes>
   <Categories>
     <Category>Inner Classes</Category>

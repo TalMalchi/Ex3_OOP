@@ -1,7 +1,5 @@
 from unittest import TestCase
 from src.DiGraph import DiGraph
-# from src.GraphInterface import GraphInterface
-# from src.NodeData import NodeData
 
 
 def createGraph():
@@ -114,7 +112,9 @@ class Test(TestCase):
         self.assertEqual(10, gr.v_size())
         self.assertEqual(16, gr.e_size())
         gr.remove_node(8)
-        self.assertEqual(15, gr.e_size())
+        self.assertEqual(14, gr.e_size())
+        gr.remove_node(7)
+        self.assertEqual(12, gr.e_size())
 
 
 
