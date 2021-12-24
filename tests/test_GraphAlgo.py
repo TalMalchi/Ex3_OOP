@@ -128,23 +128,29 @@ class Test(TestCase):
         lstTest.append(5)
         lstTest.append(9)
         list = g_algo1.TSP(lstTest)  #####g_algo?
-
-        self.assertEqual(2, list[0])
-        self.assertEqual(6, list[1])
-        self.assertEqual(5, list[2])
-        self.assertEqual(6, list[3])
-        self.assertEqual(7, list[4])
-        self.assertEqual(8, list[5])
-        self.assertEqual(9, list[6])
+        print(list[1])
+        self.assertEqual(2, list[0][0])
+        self.assertEqual(6, list[0][1])
+        self.assertEqual(5, list[0][2])
+        self.assertEqual(6, list[0][3])
+        self.assertEqual(7, list[0][4])
+        self.assertEqual(8, list[0][5])
+        self.assertEqual(9, list[0][6])
 
         g4 = DiGraph()
         g_algo4 = GraphAlgo(g4)
         g_algo4.load_from_json("data/emptyGraph.json")
         ans = g_algo4.TSP(lstTest)
-        self.assertTrue(ans is None)#the graph is empty so function return none
-
+        self.assertTrue(ans is None)  # the graph is empty so function return none
 
     def test_center(self):
+        """Results for center ->
+A0 - (7, 6.806805834715163)
+A1 - (8, 9.925289024973141)
+A2 - (0, 7.819910602212574)
+A3 - (2, 8.182236568942237)
+A4 - (6, 8.071366078651435)
+A5- (40, 9.291743173960954)"""
         g = DiGraph()
         g_algo = GraphAlgo(g)
         g_algo.load_from_json("data/G1.json")
@@ -159,12 +165,59 @@ class Test(TestCase):
         g3 = DiGraph()
         g_algo3 = GraphAlgo(g3)
         g_algo3.load_from_json("data/emptyGraph.json")
-        temp = g_algo3.centerPoint()  # [0]
+        temp = g_algo3.centerPoint()
         self.assertTrue(temp is None)
+
+        g4 = DiGraph()
+        g_algo4 = GraphAlgo(g4)
+        g_algo4.load_from_json("data/A0.json")
+        ans = g_algo4.centerPoint()[0]
+        ans1 = g_algo4.centerPoint()[1]
+        self.assertEqual(7, ans)
+        self.assertEqual(6.806805834715163, ans1)
+
+        g5 = DiGraph()
+        g_algo5 = GraphAlgo(g5)
+        g_algo5.load_from_json("data/A1.json")
+        ans = g_algo5.centerPoint()[0]
+        ans1 = g_algo5.centerPoint()[1]
+        self.assertEqual(8, ans)
+        self.assertEqual(9.925289024973141, ans1)
+
+        g6 = DiGraph()
+        g_algo6 = GraphAlgo(g6)
+        g_algo6.load_from_json("data/A2.json")
+        ans = g_algo6.centerPoint()[0]
+        ans1 = g_algo6.centerPoint()[1]
+        self.assertEqual(0, ans)
+        self.assertEqual(7.819910602212574, ans1)
+
+        g7 = DiGraph()
+        g_algo7 = GraphAlgo(g7)
+        g_algo7.load_from_json("data/A3.json")
+        ans = g_algo7.centerPoint()[0]
+        ans1 = g_algo7.centerPoint()[1]
+        self.assertEqual(2, ans)
+        self.assertEqual(8.182236568942237, ans1)
+
+        g8 = DiGraph()
+        g_algo8 = GraphAlgo(g8)
+        g_algo8.load_from_json("data/A4.json")
+        ans = g_algo8.centerPoint()[0]
+        ans1 = g_algo8.centerPoint()[1]
+        self.assertEqual(6, ans)
+        self.assertEqual(8.071366078651435, ans1)
+
+        g9 = DiGraph()
+        g_algo9 = GraphAlgo(g9)
+        g_algo9.load_from_json("data/A5.json")
+        ans = g_algo9.centerPoint()[0]
+        ans1 = g_algo9.centerPoint()[1]
+        self.assertEqual(40, ans)
+        self.assertEqual(9.291743173960954, ans1)
 
     # BIG GRAPH DO NOT RUN
     # g4 = DiGraph()
     # g_algo4 = GraphAlgo(g4)
     # g_algo4.load_from_json("data/1000Nodes.json")
     # self.assertEqual(362, g_algo4.center()[0])
-
