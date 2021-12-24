@@ -9,7 +9,7 @@ Note: a requirements file has been added to the repository, so that running the 
 ## Classes and Algorithms
 We received several abstract classes to implement (as if interfaces in Java), as well as some json files to test the
 algorithms on. The graph is to be built from json and be able to be written to json. The UML of class structure is
-shown below. To view the explanation on how each algorithm is implemented, click here.
+shown below. To view the explanation on how each algorithm is implemented, click [here](https://github.com/TalMalchi/Ex3_OOP/wiki/GraphAlgo).
 
 ## Tests and Performance
 To test the correctness of the program and its functions, several tests were run, which included, beyond the basic
