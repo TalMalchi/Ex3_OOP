@@ -113,8 +113,6 @@ class Test(TestCase):
         self.assertEqual(16, gr.e_size())
         gr.remove_node(8)
         self.assertEqual(14, gr.e_size())
-        gr.remove_node(7)
-        self.assertEqual(12, gr.e_size())
 
 
 
