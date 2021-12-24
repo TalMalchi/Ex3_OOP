@@ -28,8 +28,9 @@ class GraphAlgo(GraphAlgoInterface):
             self.g = DiGraph()
             root_dir = os.path.dirname(os.path.abspath(__file__))[:-4]
             #path = os.path.join(root_dir, file_name)
-            path = root_dir + file_name
-            with open(path) as f:
+            if "Ex3_OOP" not in file_name:
+                file_name = root_dir + '/' + file_name
+            with open(file_name) as f:
                 data = f.read()
                 graph_algo = json.loads(data)
                 for node in graph_algo["Nodes"]:
@@ -179,12 +180,12 @@ class GraphAlgo(GraphAlgoInterface):
             return float('inf'), []
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        temp = []  # temp node list
+        ret = []  # node list to be returned
         weight = 0
         if len(node_lst) == 0:  # check if the node's list is empty
             return None
         currNode = node_lst[0]
-        temp.append(currNode)
+        ret.append(currNode)
         visitedNodes = []
         while len(node_lst) != 0:  # while there are still unvisited cities
             visitedNodes.append(currNode)  # add the current node to visitedNode list
@@ -203,20 +204,20 @@ class GraphAlgo(GraphAlgoInterface):
                         min_distance = curr_distance
                         nextNode = node
                         path = short_path_result[1]  # add the closest node to path list
-                        currNode = nextNode
 
+            currNode = nextNode
             for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
-                if node is not path[0]:  # add all vertices if they are not the first item in the 'path' list
-                    temp.append(node)
+                if node != path[0]:  # add all vertices if they are not the first item in the 'path' list
+                    ret.append(node)
                     visitedNodes.append(node)  # add node to visitednodes list
                     if node in node_lst:
                         node_lst.remove(node)
-        if len(temp) == 0:
+        if len(ret) == 0:
             return None
-        for index in range(len(temp) - 1):
-            weight = weight + self.g.get_edge_weight(temp[index], temp[index + 1])
+        for index in range(1, len(ret)):
+            weight += self.g.get_edge_weight(ret[index-1], ret[index])
 
-        return temp, weight
+        return ret, weight
 
     def centerPoint(self) -> (int, float):
         dijk_route = {}  # note that we get from dijkstra : {node_id: [distance, previous_node_id]}
