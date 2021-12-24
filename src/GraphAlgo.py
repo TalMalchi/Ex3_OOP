@@ -113,17 +113,17 @@ class GraphAlgo(GraphAlgoInterface):
         start.set_distance(0)
 
         # Put tuple pair into the priority queue
-        unvisited_queue = [(node.get_distance(), node) for node in self.g.get_all_v().values()]
+        unvisited_queue = [(node.get_distance(), node.get_id()) for node in self.g.get_all_v().values()]
         heapq.heapify(unvisited_queue)
 
         # First ,we will initialize boolean array for visit or not
-        Visited = {}  # {src: {dest: boolean}}
-        for curr_src_key in self.g.Edges.keys():  # for each src key in the dictionary
-            for innerKey in self.g.Edges[curr_src_key].keys():  # for each dest
-                # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
-                Visited.update({curr_src_key: {innerKey, False}})
+        # Visited = {}  # {src: {dest: boolean}}
+        # for curr_src_key in self.g.Edges.keys():  # for each src key in the dictionary
+        #     for innerKey in self.g.Edges[curr_src_key].keys():  # for each dest
+        #         # put all src&dest in new dictionary and update all values like this: {src: {dest: False}}
+        #         Visited.update({curr_src_key: {innerKey, False}})
 
-        while len(unvisited_queue):
+        while len(unvisited_queue) != 0:
             uv = heapq.heappop(unvisited_queue)  # Pops a vertex with the smallest distance
             current = uv[1]
             # we will change the edge as visited (means True)

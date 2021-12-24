@@ -112,17 +112,19 @@ def check3():
 
 
 if __name__ == '__main__':
-    check2()
-    #  g = DiGraph()
-    # g_algo = GraphAlgo(g)
-    # g_algo.load_from_json("data/G1.json")
+    # check2()
+    g = DiGraph()
+    g_algo = GraphAlgo(g)
+    g_algo.load_from_json("data/G1.json")
+    g_algo.dijkstra(g_algo.g.getNode(5))
+    print()
     # # gr = Test().initGr()
-     #g_algo.g = gr
+    # # g_algo.g = gr
     # g_algo.plot_graph()
     # # print(g_algo.dijkstra(g_algo.g.getNode(1)))
     # # print(g_algo.shortest_path(5, 9))
     # # print(g_algo.TSP([2, 5, 9]))
     # # print(g_algo.centerPoint())
     #
-   # gui = GUI(g_algo.g)
-   # gui.init_gui()
+    # # gui = GUI(g_algo.g)
+    # # gui.init_gui()
