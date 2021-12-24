@@ -10,31 +10,68 @@ from src import GraphInterface
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, g: DiGraph):
-        self.g = g
+    def __init__(self, g=None):
+        if g is not None:
+            self.g = g
+        else:
+            self.g = DiGraph()
 
     def get_graph(self) -> GraphInterface:
         return self.g
 
     def load_from_json(self, file_name: str) -> bool:
         try:
+            if file_name[0] == '.':
+                file_name = file_name[1:]
+            if file_name[0] == '.':
+                file_name = file_name[1:]
             self.g = DiGraph()
             root_dir = os.path.dirname(os.path.abspath(__file__))[:-4]
-            path = os.path.join(root_dir, file_name)
-            with open(path) as f:
+            #path = os.path.join(root_dir, file_name)
+            if "Ex3_OOP" not in file_name:
+                file_name = root_dir + '/' + file_name
+            with open(file_name) as f:
                 data = f.read()
                 graph_algo = json.loads(data)
                 for node in graph_algo["Nodes"]:
-                    self.g.add_node(node["id"], node["pos"])
+                    try:
+                        self.g.add_node(node["id"], node["pos"])
+                    except Exception:
+                        self.g.add_node(node["id"])
+
                 for edge in graph_algo["Edges"]:
                     self.g.add_edge(edge["src"], edge["dest"], edge["w"])
 
         except IOError as e:
-            print(e)
             return False
         return True
 
+    # def load_from_json(self, file_name: str) -> bool:
+    #     try:
+    #         self.g = DiGraph()
+    #         root_dir = os.path.dirname(os.path.abspath(__file__))[:-4]
+    #         path = os.path.join(root_dir, file_name)
+    #         with open(path) as f:
+    #             data = f.read()
+    #             graph_algo = json.loads(data)
+    #             for node in graph_algo["Nodes"]:
+    #                 self.g.add_node(node["id"], node["pos"])
+    #             for edge in graph_algo["Edges"]:
+    #                 self.g.add_edge(edge["src"], edge["dest"], edge["w"])
+    #
+    #     except IOError as e:
+    #         print(e)
+    #         return False
+    #     return True
+
     def save_to_json(self, file_name: str) -> bool:
+        if file_name[0] == '.':
+            file_name = file_name[1:]
+        if file_name[0] == '.':
+            file_name = file_name[1:]
+        if file_name[-5:] != '.json':
+            file_name += '.json'
+
         try:
             if self.g is None:
                 return False
@@ -42,8 +79,11 @@ class GraphAlgo(GraphAlgoInterface):
             # add edges to list
             edges = []
             for n in self.g.get_all_v().keys():
-                for dest in self.g.all_out_edges_of_node(n):
-                    edges.append({"src": n, "dest": dest, "w": self.g.all_out_edges_of_node(n).get(dest)})
+                try:
+                    for dest in self.g.all_out_edges_of_node(n):
+                        edges.append({"src": n, "dest": dest, "w": self.g.get_edge_weight(n, dest)})
+                except Exception:
+                    continue
 
             # add nodes to list
             nodes = []
@@ -51,11 +91,10 @@ class GraphAlgo(GraphAlgoInterface):
                 nodes.append({"id": key, "pos": self.g.get_all_v()[key].get_pos()})
 
             saved_graph = {"Nodes": nodes, "Edges": edges}
-            with open(file_name, 'w') as json_file:
+            with open(os.path.dirname(os.path.abspath(__file__))[:-4] + file_name, 'w') as json_file:
                 json.dump(saved_graph, json_file)
 
         except IOError as e:
-            print(e)
             return False
         return True
 
@@ -141,11 +180,12 @@ class GraphAlgo(GraphAlgoInterface):
             return float('inf'), []
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        temp = []  # temp node list
+        ret = []  # node list to be returned
+        weight = 0
         if len(node_lst) == 0:  # check if the node's list is empty
             return None
         currNode = node_lst[0]
-        temp.append(currNode)
+        ret.append(currNode)
         visitedNodes = []
         while len(node_lst) != 0:  # while there are still unvisited cities
             visitedNodes.append(currNode)  # add the current node to visitedNode list
@@ -164,18 +204,20 @@ class GraphAlgo(GraphAlgoInterface):
                         min_distance = curr_distance
                         nextNode = node
                         path = short_path_result[1]  # add the closest node to path list
-                        currNode = nextNode
 
+            currNode = nextNode
             for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
-                if node is not path[0]:  # add all vertices if they are not the first item in the 'path' list
-                    temp.append(node)
+                if node != path[0]:  # add all vertices if they are not the first item in the 'path' list
+                    ret.append(node)
                     visitedNodes.append(node)  # add node to visitednodes list
                     if node in node_lst:
                         node_lst.remove(node)
-        if len(temp) == 0:
+        if len(ret) == 0:
             return None
-        # TODO: bug here, returned 1 temporarily
-        return temp, 1
+        for index in range(1, len(ret)):
+            weight += self.g.get_edge_weight(ret[index-1], ret[index])
+
+        return ret, weight
 
     def centerPoint(self) -> (int, float):
         dijk_route = {}  # note that we get from dijkstra : {node_id: [distance, previous_node_id]}

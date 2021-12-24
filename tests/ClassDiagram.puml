@@ -1,0 +1,173 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+class DiGraph{
+
++self.Edges : dict
++self.Nodes : dict
++ self.edge_size : int
++ self.mc : int
+
++ v_size(self) :int
++def getNode(self, key): NodeData
++def get_all_v(self) :dict
++def get_edge_weight(self, src: int, dest: int): float
++def all_in_edges_of_node(self, id1: int) : dict
++def all_out_edges_of_node(self, id1: int) : dict
++def e_size(self) : int
++def get_mc(self) : int
++def add_edge(self, id1: int, id2: int, weight: float): bool
++def add_node(self, node_id: int, pos: tuple = None) : bool
++def remove_node(self, node_id: int) :bool
++def remove_edge(self, node_id1: int, node_id2: int) : bool
++def toJSON(self):
+
+}
+class GraphInterface{
+
++ v_size(self) :int
++def get_all_v(self) :dict
++def all_in_edges_of_node(self, id1: int) : dict
++def all_out_edges_of_node(self, id1: int) : dict
++def e_size(self) : int
++def get_mc(self) : int
++def add_edge(self, id1: int, id2: int, weight: float): bool
++def add_node(self, node_id: int, pos: tuple = None) : bool
++def remove_node(self, node_id: int) :bool
++def remove_edge(self, node_id1: int, node_id2: int) : bool
+}
+
+class GraphAlgo{
+
++self.g = DiGraph()
+
+
++def get_graph(self) : GraphInterface
++def load_from_json(self, file_name: str): bool
++def save_to_json(self, file_name: str): bool
++def shortest_path(self, id1: int, id2: int) :(float, list)
++def TSP(self, node_lst: List[int]): (List[int], float)
++def centerPoint(self): (int, float)
++def plot_graph(self): None
+def dijkstra(self, start): dict
+
+}
+class GraphAlgoInterface{
+
++def get_graph(self) : GraphInterface
++def load_from_json(self, file_name: str): bool
++def save_to_json(self, file_name: str): bool
++def shortest_path(self, id1: int, id2: int) :(float, list)
++def TSP(self, node_lst: List[int]): (List[int], float)
++def centerPoint(self): (int, float)
++def plot_graph(self): None
+}
+
+class main{
++check0()
++check1()
++check2()
++check3()
+
+}
+
+class NodeData{
+
++self.id : int
++self.x : float
++self.y :  float
++self.z:float
+
+ +self.distance : sys.maxsize
+ +self.adjacent : dict
+ +self.visited : bool
+ +self.previous  : None
+ +def get_visited(self): bool
+ +def get_id(self) : int
+ +def get_distance(self): float
+ +def get_x(self): float
+ +def get_y(self): float
+ +def get_z(self): float
+ +def get_pos(self): str
+ +def get_weight(self, neighbor): float
+ +def set_previous(self, prev): None
+ +def set_distance(self, dist): None
+ +def get_previous(self, current): NodeData
+ +def __str__(self): str
+ +def set_visited(self): None
+ +def __eq__(self, other): bool
+ +def __ne__(self, other):bool
+ +def __lt__(self, other):bool
+ +def __gt__(self, other):bool
+ +def __le__(self, other):bool
+ +def __ge__(self, other):bool
+
+
+}
+ class Button{
++self.x, self.y :float
++ self.font: font
++self.text : Font
++self.size : tuple
++self.surface :
++self.surface.fill(bg)
++self.surface.blit(self.text, (2.5, 0))
++self.rect = pg.Rect(self.x, self.y, self.size[0], self.size[1])
++def show(self, screen) : None
++def click(self, event): bool
+ }
+
+ class GraphGUI{
++ def init_gui(self): None
++ def redraw(self, screen, screen_x_size, screen_y_size): sys.maxsize
++ def draw_graph_edges(self, screen, screen_x_size, screen_y_size): None
+ +def draw_one_edge(self, screen, screen_x_size, screen_y_size, edgeSrcID, edgeDestID, colour): None
+ +def draw_graph_nodes(self, screen, screen_x_size, screen_y_size): None
++ def display_temp_text(self, screen, text: str, pos): float
++ def __init__(self, gr: GraphAlgo): DiGraph
++ def quadratic(a, b, c): float
++ def drawArrowForEdge(screen, screen_x_size, screen_y_size, src_node_x, src_node_y, dest_node_x, dest_node_y, colour): None
++ def get_away_from_edge_of_screen(x, y, screen_x_size, screen_y_size): float
++ def normalize_y(screen_y_size, currNodeVal) :float
++ def distance(point1, point2) : float
+ + def normalize_x(screen_x_size, currNodeVal):float:
+ +def init(g: GraphAlgo): None
+
+
+ }
+ class InputField{
++ self.x = float
++ self.y : float
++ self.w : float
++ self.h : float
++ self.rect : pg.Rect(x, y, w, h)
+  +self.color : colour
+  +self.text : text
+ + self.font : font
+ + self.txt_surface : font
++ self.active :bool
++self.final_text : str
+
++ def handle_event(self, screen, event):None
+ +def update(self):None
+ +def draw(self, screen):None
+
+ }
+
+InputField--> GraphGUI
+Button-->GraphGUI
+GraphGUI-->GraphAlgo
+DiGraph-->GraphInterface
+GraphAlgo-->GraphAlgoInterface
+DiGraph-->GraphAlgo
+NodeData-->DiGraph
+NodeData-->GraphAlgo
+main-->GraphAlgo
+main-->DiGraph
+
+
+@enduml
