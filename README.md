@@ -15,9 +15,9 @@ shown below. To view the explanation on how each algorithm is implemented, click
 To test the correctness of the program and its functions, several tests were run, which included, beyond the basic
 tests, a comparison test between the outputs of this program and the program written in Java, for those tests which are
 difficult to compute by hand. A detailed comparison between the two sets of algorithms, including runtime comparisons,
-can be viewed here.
+can be viewed [here](https://github.com/TalMalchi/Ex3_OOP/wiki/Comparisons).
 
 ## comparisons:
 In this Part,  we were required to make a comparison of running time between implementations in Python and Java.
 The results show the running times between 4 different directed weighted graphs and 4 different algorithms.
-You can see the results in this [wiki](https://github.com/TalMalchi/Ex3_OOP.wiki.git)!
+The comparison may be viewed [here](https://github.com/TalMalchi/Ex3_OOP.wiki.git)!
