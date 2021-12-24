@@ -1,4 +1,5 @@
 from unittest import TestCase
+
 from src.DiGraph import DiGraph
 from src.GraphAlgo import GraphAlgo
 
@@ -216,8 +217,13 @@ A5- (40, 9.291743173960954)"""
         self.assertEqual(40, ans)
         self.assertEqual(9.291743173960954, ans1)
 
-    # BIG GRAPH DO NOT RUN
-    # g4 = DiGraph()
-    # g_algo4 = GraphAlgo(g4)
-    # g_algo4.load_from_json("data/1000Nodes.json")
-    # self.assertEqual(362, g_algo4.center()[0])
+    # BIG GRAPH
+    def test_big(self):
+        g = DiGraph()
+        g_algo = GraphAlgo(g)
+        g_algo.load_from_json("data/100000.json")
+        # g_algo.save_to_json("data/A5_saved.json")
+        # result1, result2 = g_algo.centerPoint()
+        # result1, result2 = g_algo.shortest_path(31, 826)
+        result1, result2 = g_algo.TSP([1, 10, 11, 20, 13])
+        print("\n" + str(result1), str(result2))

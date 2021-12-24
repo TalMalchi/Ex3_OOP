@@ -226,7 +226,7 @@ class GUI:
                     node = self.graph.get_graph().getNode(id)
                     x = normalize_x(pg.display.Info().current_w, node.get_x())  # Normalizing to plot
                     y = normalize_y(pg.display.Info().current_h, node.get_y())
-                    pg.draw.circle(screen, (255, 0, 0), (x, y), GUI.circle_rad + 2)  # plot red circle to represent node
+                    pg.draw.circle(screen, (255, 0, 0), (x, y), GUI.circle_rad + 5)  # plot red circle to represent node
                     string = "The center point with ID: " + str(
                         id) + " has been coloured red, its maximal distance from other nodes is: " + str(center[1])
                     start_timer = self.display_temp_text(screen, string, (
