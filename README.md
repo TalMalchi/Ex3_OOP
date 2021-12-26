@@ -21,3 +21,6 @@ can be viewed [here](https://github.com/TalMalchi/Ex3_OOP/wiki/Comparisons).
 In this Part,  we were required to make a comparison of running time between implementations in Python and Java.
 The results show the running times between 4 different directed weighted graphs and 4 different algorithms.
 The comparison may be viewed [here](https://github.com/TalMalchi/Ex3_OOP/wiki/Comparisons)!
+
+
+![ClassDiagram](https://user-images.githubusercontent.com/93086649/147412697-01b3b5cd-1acd-461f-be57-cc64568610d4.png)
