@@ -124,17 +124,18 @@ class GraphAlgo(GraphAlgoInterface):
 
             # now I would like to create one long dictionary of all neighbors of current node
             All_neighbors = self.g.all_out_edges_of_node(current.id)
-            for next_node_id in All_neighbors.keys():  # for next in All_neighbors:
-                next_node = self.g.getNode(next_node_id)
-                if next_node.get_visited():  # if visited, skip
-                    continue
-                new_dist = current.get_distance() + All_neighbors[next_node_id]  # {dest_node_id: edge_weight}
-                if new_dist < next_node.get_distance():
-                    next_node.set_distance(new_dist)
-                    next_node.set_previous(current)
-                    # update the relevant value in the answer means:{node_id: [distance, previous_node_id]}
-                    final_dijkstra.update({next_node.get_id(): [next_node.get_distance(), next_node.get_previous(
-                        current).get_id()]})
+            if All_neighbors is not None:
+                for next_node_id in All_neighbors.keys():  # for next in All_neighbors:
+                    next_node = self.g.getNode(next_node_id)
+                    if next_node.get_visited():  # if visited, skip
+                        continue
+                    new_dist = current.get_distance() + All_neighbors[next_node_id]  # {dest_node_id: edge_weight}
+                    if new_dist < next_node.get_distance():
+                        next_node.set_distance(new_dist)
+                        next_node.set_previous(current)
+                        # update the relevant value in the answer means:{node_id: [distance, previous_node_id]}
+                        final_dijkstra.update({next_node.get_id(): [next_node.get_distance(), next_node.get_previous(
+                            current).get_id()]})
 
             # Rebuild heap
             while len(unvisited_queue):  # Pop every item

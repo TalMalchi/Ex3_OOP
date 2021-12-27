@@ -1,5 +1,7 @@
 import json
 import random
+import sys
+
 from src.GraphInterface import GraphInterface
 from src.NodeData import NodeData
 
@@ -23,6 +25,8 @@ class DiGraph(GraphInterface):
         self.Nodes = {}
         self.edge_size = 0
         self.mc = 0
+        NodeData.min_value = {'x': -sys.maxsize, 'y': -sys.maxsize, 'z': -sys.maxsize}
+        NodeData.max_value = {'x': sys.maxsize, 'y': sys.maxsize, 'z': sys.maxsize}
 
     def v_size(self) -> int:
         """return the number of nodes are in the graph"""
@@ -49,7 +53,10 @@ class DiGraph(GraphInterface):
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         """get id of node and return dictionary of all edges OUT from it{src:{dest:weight}}"""
-        return self.Edges[id1]
+        try:
+            return self.Edges[id1]
+        except Exception:
+            return None
 
     def e_size(self) -> int:
         return self.edge_size

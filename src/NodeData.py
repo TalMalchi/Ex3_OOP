@@ -8,16 +8,16 @@ class NodeData:
 
     def __init__(self, pos: str, id: int):
         self.id = id
-        if pos == 'None' or pos is None: #if pos is nonwwe will initilized all x,y,z values as none
+        if pos == 'None' or pos is None:  # if pos is nonwwe will initilized all x,y,z values as none
             self.x = None
             self.y = None
             self.z = None
         else:
-            pos_lst = pos.split(',') #split string by ,
-            self.x = float(pos_lst[0]) #we will take the first element as x
-            self.y = float(pos_lst[1]) #we will take the sec element as y
-            self.z = float(pos_lst[2]) ##we will take the third element as z
-            #define min max values to present the graph
+            pos_lst = pos.split(',')  # split string by ,
+            self.x = float(pos_lst[0])  # we will take the first element as x
+            self.y = float(pos_lst[1])  # we will take the sec element as y
+            self.z = float(pos_lst[2])  # we will take the third element as z
+            # define min max values to present the graph
             if NodeData.min_value['x'] < self.x:
                 NodeData.min_value['x'] = self.x
             if NodeData.min_value['y'] < self.y:
@@ -85,7 +85,7 @@ class NodeData:
         """initilizes attribute as defoltive true boolean value"""
         self.visited = True
 
-#for using heapq.heapify in GraphAlgo-we will define comperators
+    # for using heapq.heapify in GraphAlgo-we will define comperators
 
     def __eq__(self, other):
         return self.get_id() == other.get_id
