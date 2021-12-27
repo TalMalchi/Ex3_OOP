@@ -28,6 +28,9 @@ class DiGraph(GraphInterface):
         NodeData.min_value = {'x': -sys.maxsize, 'y': -sys.maxsize, 'z': -sys.maxsize}
         NodeData.max_value = {'x': sys.maxsize, 'y': sys.maxsize, 'z': sys.maxsize}
 
+    def __str__(self):
+        return "Graph: |V|=" + str(self.v_size()) + " , |E|=" + str(self.e_size())
+
     def v_size(self) -> int:
         """return the number of nodes are in the graph"""
         return len(self.Nodes)

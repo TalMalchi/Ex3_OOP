@@ -78,8 +78,8 @@ class NodeData:
         return self.previous
 
     def __str__(self):
-        """for debugging purposes only"""
-        return str("id: " + str(self.id) + " pos: " + str(self.x) + ',' + str(self.y) + ',' + str(self.z))
+        """toString function"""
+        return str("id: " + str(self.id))
 
     def set_visited(self):
         """initilizes attribute as defoltive true boolean value"""
